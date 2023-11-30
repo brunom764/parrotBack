@@ -14,7 +14,7 @@ import { UserDto } from './dtos'
 import { Tier, User } from './entities'
 
 @Controller('identity')
-export class ClientController {
+export class IdentityController {
 	constructor(private readonly identityService: IdentityService) {}
 
 	@HttpCode(201)
