@@ -21,13 +21,19 @@ export class IdentityService {
 		}
 	}
 
-	async recoverPassword(email: string) {
+	async createAccountByLoginWithGoogle(email: string) {
 		try {
 			const user = await this.getUserByEmail(email)
-			if (!user) throw new Error('user-not-found')
-			return await getAuth().generatePasswordResetLink(email)
+			if (!user) {
+				const accountInfo = await getAuth().getUserByEmail(email)
+				await this.identityDatabase.createUser(
+					accountInfo.uid,
+					email,
+					accountInfo.passwordHash
+				)
+			}
 		} catch (error) {
-			throw new Error('user-recover-password/failed')
+			throw new Error('user-verify-exists/failed')
 		}
 	}
 

@@ -27,12 +27,12 @@ export class IdentityController {
 		}
 	}
 
-	@Put('recover-password')
-	async recoverPassword(@Body() email: string): Promise<string> {
+	@Post('login-with-google')
+	async loginWithGoogle(@Body() email: string): Promise<void> {
 		try {
-			return await this.identityService.recoverPassword(email)
+			return await this.identityService.createAccountByLoginWithGoogle(email)
 		} catch (error) {
-			throw new InternalServerErrorException('user/recover-password-failed')
+			throw new InternalServerErrorException('user/login-with-google-failed')
 		}
 	}
 
