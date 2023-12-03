@@ -28,9 +28,9 @@ export class IdentityController {
 	}
 
 	@Post('login-with-google')
-	async loginWithGoogle(@Body() email: string): Promise<void> {
+	async loginWithGoogle(@Body() data: { email: string }): Promise<void> {
 		try {
-			return await this.identityService.createAccountByLoginWithGoogle(email)
+			return await this.identityService.createAccountByLoginWithGoogle(data.email)
 		} catch (error) {
 			throw new InternalServerErrorException('user/login-with-google-failed')
 		}

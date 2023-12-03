@@ -23,13 +23,13 @@ export class IdentityService {
 
 	async createAccountByLoginWithGoogle(email: string) {
 		try {
-			const user = await this.getUserByEmail(email)
+			const user = await this.identityDatabase.getUserByEmail(email)
 			if (!user) {
 				const accountInfo = await getAuth().getUserByEmail(email)
 				await this.identityDatabase.createUser(
 					accountInfo.uid,
 					email,
-					accountInfo.passwordHash
+					'accountInfo.passwordHash'
 				)
 			}
 		} catch (error) {
