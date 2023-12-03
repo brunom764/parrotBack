@@ -21,6 +21,16 @@ export class IdentityService {
 		}
 	}
 
+	async recoverPassword(email: string) {
+		try {
+			const user = await this.getUserByEmail(email)
+			if (!user) throw new Error('user-not-found')
+			return await getAuth().generatePasswordResetLink(email)
+		} catch (error) {
+			throw new Error('user-recover-password/failed')
+		}
+	}
+
 	async getUserByEmail(email: string) {
 		try {
 			return await this.identityDatabase.getUserByEmail(email)

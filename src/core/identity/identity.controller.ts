@@ -27,6 +27,15 @@ export class IdentityController {
 		}
 	}
 
+	@Put('recover-password')
+	async recoverPassword(@Body() email: string): Promise<string> {
+		try {
+			return await this.identityService.recoverPassword(email)
+		} catch (error) {
+			throw new InternalServerErrorException('user/recover-password-failed')
+		}
+	}
+
 	@HttpCode(200)
 	@Get('user-by-email/:email')
 	async getUserByEmail(@Param('email') email: string): Promise<User> {
