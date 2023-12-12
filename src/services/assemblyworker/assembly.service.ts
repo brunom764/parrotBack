@@ -1,32 +1,36 @@
 import { Injectable} from '@nestjs/common'
+import fs from 'fs-extra'
+import axios from 'axios'
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class AssemblyService{ 
-        const API_TOKEN = 'f05486c3771a47099ee80c581feb405d';
+        api_token = process.env.ASSEMBLY_API_TOKEN
 
         // Function to upload a local file to the AssemblyAI API
         async upload_file(api_token: string, path: string): Promise<string | null> {
-        const data = fs.readFileSync(path);
-        const url = 'https://api.assemblyai.com/v2/upload';
+            const data = fs.readFileSync(path);
+            const url = 'https://api.assemblyai.com/v2/upload';
 
-        try {
-            const response = await axios.post(url, data, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                'Authorization': api_token,
-            },
-            });
+            try {
+                const response = await axios.post(url, data, {
+                headers: {
+                    'Content-Type': 'application/octet-stream',
+                    'Authorization': api_token,
+                },
+                });
 
-            if (response.status === 200) {
-            return response.data['upload_url'];
-            } else {
-            console.error(`Error: ${response.status} - ${response.statusText}`);
-            return null;
+                if (response.status === 200) {
+                return response.data['upload_url'];
+                } else {
+                console.error(`Error: ${response.status} - ${response.statusText}`);
+                return null;
+                }
+            } catch (error) {
+                console.error(`Error: ${error}`);
+                return null;
             }
-        } catch (error) {
-            console.error(`Error: ${error}`);
-            return null;
-        }
         }
 
         // Async function that sends a request to the AssemblyAI transcription API and retrieves the transcript
