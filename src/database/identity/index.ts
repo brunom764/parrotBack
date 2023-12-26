@@ -6,12 +6,11 @@ import { PrismaService } from 'src/services/prisma.service'
 export class IdentityDatabase {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
-	async createUser(id: string, email: string, password: string) {
+	async createUser(id: string, email: string) {
 		await this.prisma.user.create({
 			data: {
 				id,
-				email,
-				password
+				email
 			}
 		})
 	}

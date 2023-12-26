@@ -1,37 +1,61 @@
-import { Injectable} from '@nestjs/common'
-import { TranscriptionDto } from './dtos'
+import { Inject, Injectable } from '@nestjs/common'
 import { AssemblyService } from 'src/services/assemblyworker/assembly.service'
+import { TranscriptText, Transcription } from './entities'
+import * as uuid from 'uuid'
+import { TranscriptionDatabase } from 'src/database/transcription'
 
 @Injectable()
 export class TranscriptionService {
-    constructor(private readonly assemblyService: AssemblyService) {}
+	constructor(
+		@Inject(AssemblyService) private readonly assemblyService: AssemblyService,
+		@Inject(TranscriptionDatabase)
+		private readonly transcriptionDatabase: TranscriptionDatabase
+	) {}
 
-    async createTranscription(fileUrl: string, api_token: string){
-        try {
-            const audioUrl = await this.assemblyService.upload_file(api_token, fileUrl);
+	async createTranscription(fileUrl: string, userId: string) {
+		try {
+			const newTranscription = new Transcription({
+				id: uuid.v4(),
+				userId,
+				fileUrl,
+				createdAt: new Date()
+			})
+			const audioUrl = await this.assemblyService.upload_file(fileUrl)
 
-            if (audioUrl) {
-                return await this.assemblyService.transcribeAudio(api_token, fileUrl);
+			if (audioUrl) {
+				const text = (await this.assemblyService.transcribeAudio(
+					fileUrl
+				)) as TranscriptText[]
+				await this.transcriptionDatabase.createTranscription(
+					newTranscription.id,
+					newTranscription.userId,
+					newTranscription.fileUrl,
+					text
+				)
+			} else {
+				throw new Error('transcription/upload-failed')
+			}
+		} catch (error) {
+			throw new Error('transcription/create-failed')
+		}
+	}
 
-                //console.log('Transcription Result:', transcriptionResult);
-            } else {
-                throw new Error('transcription/upload-failed')
-            }
-        } catch (error) {
-            throw new Error('transcription/create-failed')
-        }
-    }
+	async getTranscriptionById(id: string) {
+		try {
+			const transcription = await this.transcriptionDatabase.getTranscriptionById(id)
+			return transcription
+		} catch (error) {
+			throw new Error('transcription/get-failed')
+		}
+	}
 
-    // private async uploadAudioFile(api_token: string, audioFile: string): Promise<string | null> {
-    //     try {            
-    //         const fileUrl = await this.assemblyService.upload_file(api_token, audioFile);
-    //         if (fileUrl) {
-    //             return fileUrl;
-    //         } else {
-    //             throw new Error('transcription/upload-failed')
-    //         }
-    //     } catch (error) {
-    //         throw new Error('transcription/upload-failed')
-    //     }
-    // }
+	async getTranscriptionsByUserId(userId: string) {
+		try {
+			const transcriptions =
+				await this.transcriptionDatabase.getTranscriptionsByUserId(userId)
+			return transcriptions
+		} catch (error) {
+			throw new Error('transcriptions/get-failed')
+		}
+	}
 }

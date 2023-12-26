@@ -1,30 +1,35 @@
-import { User } from "@core/identity/entities"
-
-export interface iTranscription{
-    id: string
-    userId: string
-    textFile: string
-    summary: string
-    createdAt: Date
-    user: User     
-    //questions: Question[]
+export type TranscriptText = {
+	text: string
+	start: number
+	end: number
+	speaker: number
 }
 
-export class Transcription implements iTranscription {
-    id: string
-    userId: string
-    textFile: string
-    summary: string
-    createdAt: Date
-    user: User     
-    //questions: Question[]
-    constructor(transcription: iTranscription){
-        this.id = transcription.id
-        this.userId = transcription.userId
-        this.textFile = transcription.textFile
-        this.summary = transcription.summary
-        this.createdAt = transcription.createdAt
-        this.user = transcription.user
-        //this.questions = transcription.questions
-    }
+export interface ITranscription {
+	id: string
+	userId: string
+	fileUrl: string
+	text?: TranscriptText[]
+	createdAt: Date
+	summary?: string
+	//questions?: Question[]
+}
+
+export class Transcription implements ITranscription {
+	id: string
+	userId: string
+	fileUrl: string
+	text?: TranscriptText[]
+	createdAt: Date
+	summary?: string
+	//questions?: Question[]
+	constructor(transcription: ITranscription) {
+		this.id = transcription.id
+		this.userId = transcription.userId
+		this.fileUrl = transcription.fileUrl
+		this.text = transcription.text
+		this.summary = transcription.summary
+		this.createdAt = transcription.createdAt
+		//this.questions = transcription.questions
+	}
 }

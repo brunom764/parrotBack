@@ -1,24 +1,65 @@
 import {
+	BadRequestException,
 	Controller,
-	Post,
 	HttpCode,
-	Body,
-	InternalServerErrorException
+	InternalServerErrorException,
+	Param,
+	Post,
+	UploadedFile,
+	UseInterceptors
 } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
+import * as multer from 'multer'
 import { TranscriptionService } from './transcription.service'
-import { TranscriptionDto } from './dtos';
+
+// ...
 
 @Controller('transcription')
 export class TranscriptionController {
-    constructor(private readonly transcriptionService: TranscriptionService) {}
+	constructor(private readonly transcriptionService: TranscriptionService) {}
 
-    @HttpCode(201)
-    @Post('create-transcription')
-    async createTranscription(@Body() data: {api_token: string, file_url: string}): Promise<void> {
-        try {
-            return await this.transcriptionService.createTranscription(data.api_token, data.file_url);
-        } catch (error) {
-            throw new InternalServerErrorException('transcription/create-failed');
-        }
-    }
+	@HttpCode(201)
+	@Post('upload-audio/:id')
+	@UseInterceptors(
+		FileInterceptor('file', {
+			storage: multer.diskStorage({
+				destination: './uploads',
+				filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+			}),
+			fileFilter: (req, file, cb) => {
+				if (file.mimetype === 'audio/mpeg') {
+					cb(null, true)
+				} else {
+					cb(new BadRequestException('Invalid file type'), false)
+				}
+			}
+		})
+	)
+	async uploadAudio(@UploadedFile() file, @Param('id') userId: string): Promise<void> {
+		try {
+			const filePath = './uploads/' + file.filename
+			await this.transcriptionService.createTranscription(filePath, userId)
+		} catch (error) {
+			throw new InternalServerErrorException('transcription/upload-failed')
+		}
+	}
+
+	async getTranscriptionById(@Param('id') id: string) {
+		try {
+			const transcription = await this.transcriptionService.getTranscriptionById(id)
+			return transcription
+		} catch (error) {
+			throw new InternalServerErrorException('transcription/get-failed')
+		}
+	}
+
+	async getTranscriptionsByUserId(@Param('id') userId: string) {
+		try {
+			const transcriptions =
+				await this.transcriptionService.getTranscriptionsByUserId(userId)
+			return transcriptions
+		} catch (error) {
+			throw new InternalServerErrorException('transcriptions/get-failed')
+		}
+	}
 }
