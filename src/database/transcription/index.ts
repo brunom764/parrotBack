@@ -9,14 +9,14 @@ export class TranscriptionDatabase {
 	async createTranscription(
 		id: string,
 		userId: string,
-		fileUrl: string,
+		name: string,
 		text?: TranscriptText[]
 	) {
 		await this.prisma.transcription.create({
 			data: {
 				id,
 				userId,
-				fileUrl,
+				name,
 				text
 			}
 		})
@@ -59,7 +59,7 @@ export class TranscriptionDatabase {
 			},
 			select: {
 				id: true,
-				fileUrl: true,
+				name: true,
 				createdAt: true
 			}
 		})

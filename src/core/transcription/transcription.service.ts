@@ -12,12 +12,12 @@ export class TranscriptionService {
 		private readonly transcriptionDatabase: TranscriptionDatabase
 	) {}
 
-	async createTranscription(fileUrl: string, userId: string) {
+	async createTranscription(fileUrl: string, userId: string, name: string) {
 		try {
 			const newTranscription = new Transcription({
 				id: uuid.v4(),
 				userId,
-				fileUrl,
+				name,
 				createdAt: new Date()
 			})
 			const audioUrl = await this.assemblyService.upload_file(fileUrl)
@@ -29,7 +29,7 @@ export class TranscriptionService {
 				await this.transcriptionDatabase.createTranscription(
 					newTranscription.id,
 					newTranscription.userId,
-					newTranscription.fileUrl,
+					newTranscription.name,
 					text
 				)
 			} else {

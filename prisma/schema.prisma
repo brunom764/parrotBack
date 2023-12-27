@@ -23,7 +23,7 @@ model User {
 model Transcription {
   id        String    @id @default(uuid()) @map("id")
   userId    String    @map("user_id")
-  fileUrl   String    @map("file_url")
+  name      String    @map("name")
   text      Json[]    
   summary   String    @default(" ") @map("summary")
   createdAt DateTime  @default(now()) @map("created_at")

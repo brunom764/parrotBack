@@ -8,7 +8,7 @@ export type TranscriptText = {
 export interface ITranscription {
 	id: string
 	userId: string
-	fileUrl: string
+	name: string
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string
@@ -18,7 +18,7 @@ export interface ITranscription {
 export class Transcription implements ITranscription {
 	id: string
 	userId: string
-	fileUrl: string
+	name: string
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string
@@ -26,7 +26,7 @@ export class Transcription implements ITranscription {
 	constructor(transcription: ITranscription) {
 		this.id = transcription.id
 		this.userId = transcription.userId
-		this.fileUrl = transcription.fileUrl
+		this.name = transcription.name
 		this.text = transcription.text
 		this.summary = transcription.summary
 		this.createdAt = transcription.createdAt

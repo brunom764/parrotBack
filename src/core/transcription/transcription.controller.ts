@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	Body,
 	Controller,
 	HttpCode,
 	InternalServerErrorException,
@@ -35,10 +36,14 @@ export class TranscriptionController {
 			}
 		})
 	)
-	async uploadAudio(@UploadedFile() file, @Param('id') userId: string): Promise<void> {
+	async uploadAudio(
+		@UploadedFile() file,
+		@Param('id') userId: string,
+		@Body() name: string
+	): Promise<void> {
 		try {
 			const filePath = './uploads/' + file.filename
-			await this.transcriptionService.createTranscription(filePath, userId)
+			await this.transcriptionService.createTranscription(filePath, userId, name)
 		} catch (error) {
 			throw new InternalServerErrorException('transcription/upload-failed')
 		}
