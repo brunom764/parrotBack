@@ -1,14 +1,16 @@
 export type TranscriptText = {
-	text: string
-	start: number
+	confidence: number
 	end: number
-	speaker: number
+	speaker: string
+	start: number
+	text: string
 }
 
 export interface ITranscription {
 	id: string
 	userId: string
 	name: string
+	duration?: number
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string
@@ -19,6 +21,7 @@ export class Transcription implements ITranscription {
 	id: string
 	userId: string
 	name: string
+	duration?: number
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string

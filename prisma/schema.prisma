@@ -24,7 +24,8 @@ model Transcription {
   id        String    @id @default(uuid()) @map("id")
   userId    String    @map("user_id")
   name      String    @map("name")
-  text      Json[]    
+  text      Json[]
+  duration  Int       @map("duration")    
   summary   String    @default(" ") @map("summary")
   createdAt DateTime  @default(now()) @map("created_at")
   user      User      @relation(fields: [userId], references: [id])

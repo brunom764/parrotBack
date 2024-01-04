@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { AssemblyService } from 'src/services/assemblyworker/assembly.service'
-import { TranscriptText, Transcription } from './entities'
+import { Transcription } from './entities'
 import * as uuid from 'uuid'
 import { TranscriptionDatabase } from 'src/database/transcription'
+import { ITranscript } from 'src/services/assemblyworker/assembly.interface'
 
 @Injectable()
 export class TranscriptionService {
@@ -23,14 +24,24 @@ export class TranscriptionService {
 			const audioUrl = await this.assemblyService.upload_file(fileUrl)
 
 			if (audioUrl) {
-				const text = (await this.assemblyService.transcribeAudio(
+				const transcriptionInfo = (await this.assemblyService.transcribeAudio(
 					fileUrl
-				)) as TranscriptText[]
+				)) as ITranscript
+				const transcriptionText = transcriptionInfo.utterances.map((utterance) => {
+					return {
+						confidence: utterance.confidence,
+						end: utterance.end,
+						speaker: utterance.speaker,
+						start: utterance.start,
+						text: utterance.text
+					}
+				})
 				await this.transcriptionDatabase.createTranscription(
 					newTranscription.id,
 					newTranscription.userId,
 					newTranscription.name,
-					text
+					transcriptionInfo.audio_duration,
+					transcriptionText
 				)
 			} else {
 				throw new Error('transcription/upload-failed')

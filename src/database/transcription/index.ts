@@ -10,6 +10,7 @@ export class TranscriptionDatabase {
 		id: string,
 		userId: string,
 		name: string,
+		duration?: number,
 		text?: TranscriptText[]
 	) {
 		await this.prisma.transcription.create({
@@ -17,6 +18,7 @@ export class TranscriptionDatabase {
 				id,
 				userId,
 				name,
+				duration,
 				text
 			}
 		})
@@ -60,6 +62,7 @@ export class TranscriptionDatabase {
 			select: {
 				id: true,
 				name: true,
+				duration: true,
 				createdAt: true
 			}
 		})

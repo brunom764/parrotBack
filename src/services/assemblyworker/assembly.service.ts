@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import fs from 'fs-extra'
+import { IPollingData, IResponseData } from './assembly.interface'
 
 @Injectable()
 export class AssemblyService {
@@ -41,19 +42,19 @@ export class AssemblyService {
 		}
 
 		// Send a POST request to the transcription API with the audio URL in the request body
-		let response = await fetch('https://api.assemblyai.com/v2/transcript', {
+		const responsePost = await fetch('https://api.assemblyai.com/v2/transcript', {
 			method: 'POST',
 			body: JSON.stringify({ audio_url, speaker_labels: true, language_code: 'pt' }),
 			headers
 		})
 
-		if (!response.ok) {
-			console.error(`Error: ${response.status} - ${response.statusText}`)
+		if (!responsePost.ok) {
+			console.error(`Error: ${responsePost.status} - ${responsePost.statusText}`)
 			return
 		}
 
 		// Retrieve the ID of the transcript from the response data
-		const responseData = await response.json()
+		const responseData = (await responsePost.json()) as IResponseData
 		const transcriptId = responseData.id
 
 		// Construct the polling endpoint URL using the transcript ID
@@ -62,14 +63,14 @@ export class AssemblyService {
 		// Poll the transcription API until the transcript is ready
 		while (true) {
 			// Send a GET request to the polling endpoint to retrieve the status of the transcript
-			response = await fetch(pollingEndpoint, { headers })
+			const responseGet = await fetch(pollingEndpoint, { headers })
 
-			if (!response.ok) {
-				console.error(`Error: ${response.status} - ${response.statusText}`)
+			if (!responseGet.ok) {
+				console.error(`Error: ${responseGet.status} - ${responseGet.statusText}`)
 				return
 			}
 
-			const pollingData = await response.json()
+			const pollingData = (await responseGet.json()) as IPollingData
 			if (pollingData.status === 'completed') {
 				return pollingData
 			}
