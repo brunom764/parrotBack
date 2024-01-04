@@ -6,7 +6,6 @@ export enum Tier {
 export interface IUser {
 	id: string
 	email: string
-	password: string
 	tier: Tier
 	credits: number
 	createdAt: Date
@@ -16,7 +15,6 @@ export interface IUser {
 export class User {
 	id: string
 	email: string
-	password: string
 	tier: Tier | string
 	credits: number
 	createdAt?: Date
@@ -24,7 +22,6 @@ export class User {
 	constructor(user: IUser) {
 		this.id = user.id
 		this.email = user.email
-		this.password = user.password
 		this.tier = user.tier
 		this.credits = user.credits
 		this.createdAt = new Date()

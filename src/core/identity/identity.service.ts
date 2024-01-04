@@ -15,7 +15,7 @@ export class IdentityService {
 				password: user.password,
 				displayName: user.email
 			})
-			await this.identityDatabase.createUser(account.uid, user.email, user.password)
+			await this.identityDatabase.createUser(account.uid, user.email)
 		} catch (error) {
 			throw new Error('user-register/failed')
 		}
@@ -26,11 +26,7 @@ export class IdentityService {
 			const user = await this.identityDatabase.getUserByEmail(email)
 			if (!user) {
 				const accountInfo = await getAuth().getUserByEmail(email)
-				await this.identityDatabase.createUser(
-					accountInfo.uid,
-					email,
-					'accountInfo.passwordHash'
-				)
+				await this.identityDatabase.createUser(accountInfo.uid, email)
 			}
 		} catch (error) {
 			throw new Error('user-verify-exists/failed')

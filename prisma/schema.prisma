@@ -13,7 +13,6 @@ datasource db {
 model User {
   id        String    @id @default(uuid())
   email     String    @unique @map("email")
-  password  String    @map("password")
   credits   Int       @default(10)
   tier      Tier      @default(FREE) @map("tier")
   createdAt DateTime  @default(now()) @map("created_at")
@@ -22,9 +21,11 @@ model User {
 }
 
 model Transcription {
-  id        String    @id @default(uuid())
+  id        String    @id @default(uuid()) @map("id")
   userId    String    @map("user_id")
-  textfile  String    @map("textfile")
+  name      String    @map("name")
+  text      Json[]
+  duration  Int       @map("duration")    
   summary   String    @default(" ") @map("summary")
   createdAt DateTime  @default(now()) @map("created_at")
   user      User      @relation(fields: [userId], references: [id])
