@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import fs from 'fs-extra'
-import { IPollingData, IResponseData } from './assembly.interface'
+import { IResponseData, ITranscript } from './assembly.interface'
 
 @Injectable()
 export class AssemblyService {
@@ -70,7 +70,7 @@ export class AssemblyService {
 				return
 			}
 
-			const pollingData = (await responseGet.json()) as IPollingData
+			const pollingData = (await responseGet.json()) as ITranscript
 			if (pollingData.status === 'completed') {
 				return pollingData
 			}
