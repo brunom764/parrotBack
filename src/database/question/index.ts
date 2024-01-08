@@ -16,11 +16,10 @@ export class QuestionDataBase {
 		})
 	}
 
-	async createAnswer(id: string, transId: string, answer: string) {
+	async updateAnswer(id: string, answer: string) {
 		await this.prisma.question.update({
 			where: {
-				id,
-				transId
+				id
 			},
 			data: {
 				answer
