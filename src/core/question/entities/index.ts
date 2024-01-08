@@ -2,19 +2,19 @@ import { Transcription } from '@core/transcription/entities/index'
 export interface IQuestion {
 	id: string
 	transId: string
-	question: string
-	answer: string
+	question?: string
+	answer?: string
 	createdAt: Date
-	transcription: Transcription[]
+	transcription?: Transcription[]
 }
 
 export class Question implements IQuestion {
 	id: string
 	transId: string
-	question: string
-	answer: string
+	question?: string
+	answer?: string
 	createdAt: Date
-	transcription: Transcription[]
+	transcription?: Transcription[]
 	constructor(question: IQuestion) {
 		this.id = question.id
 		this.transId = question.transId
