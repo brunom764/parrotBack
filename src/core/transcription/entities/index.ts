@@ -16,7 +16,7 @@ export interface ITranscription {
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string
-	questions: Question[]
+	questions?: Question[]
 }
 
 export class Transcription implements ITranscription {
@@ -27,7 +27,7 @@ export class Transcription implements ITranscription {
 	text?: TranscriptText[]
 	createdAt: Date
 	summary?: string
-	questions: Question[]
+	questions?: Question[]
 	constructor(transcription: ITranscription) {
 		this.id = transcription.id
 		this.userId = transcription.userId
