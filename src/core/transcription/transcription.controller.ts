@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Get,
 	HttpCode,
 	InternalServerErrorException,
 	Param,
@@ -49,6 +50,7 @@ export class TranscriptionController {
 		}
 	}
 
+	@Get('transcription-by-id/:id')
 	async getTranscriptionById(@Param('id') id: string) {
 		try {
 			const transcription = await this.transcriptionService.getTranscriptionById(id)
@@ -58,6 +60,7 @@ export class TranscriptionController {
 		}
 	}
 
+	@Get('transcription-by-userId/:id')
 	async getTranscriptionsByUserId(@Param('id') userId: string) {
 		try {
 			const transcriptions =
