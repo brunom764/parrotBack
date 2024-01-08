@@ -10,8 +10,6 @@ export class QuestionService {
 		private readonly questionDataBase: QuestionDataBase
 	) {}
 
-	async createSummary() {}
-
 	async createQuestion(transId: string, question: string) {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,8 +20,7 @@ export class QuestionService {
 				createdAt: new Date()
 			})
 
-			//const answerInfo = (await this.openAiService.questionAnswer(question)) as IQuestion
-			// const answerText = (answerInfo.answer.map(answer) => {}
+			//const answerText = (await this.openAiService.questionAnswer(question))
 			await this.questionDataBase.createQuestion(
 				newQuestion.id,
 				newQuestion.transId,
@@ -32,6 +29,14 @@ export class QuestionService {
 			)
 		} catch (error) {
 			throw new Error('question/create-failed')
+		}
+	}
+
+	async updateAnswer(id: string, answer: string) {
+		try {
+			await this.questionDataBase.updateAnswer(id, answer)
+		} catch (error) {
+			throw new Error('answer-update/failed')
 		}
 	}
 
