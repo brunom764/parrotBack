@@ -6,7 +6,7 @@ export class QuestionDataBase {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
 	async createQuestion(id: string, transId: string, question: string, answer?: string) {
-		await this.prisma.question.create({
+		return await this.prisma.question.create({
 			data: {
 				id,
 				transId,
@@ -17,7 +17,7 @@ export class QuestionDataBase {
 	}
 
 	async updateAnswer(id: string, answer: string) {
-		await this.prisma.question.update({
+		return await this.prisma.question.update({
 			where: {
 				id
 			},
@@ -28,7 +28,7 @@ export class QuestionDataBase {
 	}
 
 	async getQuestionById(id: string) {
-		await this.prisma.question.findUnique({
+		return await this.prisma.question.findUnique({
 			where: {
 				id
 			}
@@ -36,7 +36,7 @@ export class QuestionDataBase {
 	}
 
 	async getQuestionsByTransId(transId: string) {
-		await this.prisma.question.findMany({
+		return await this.prisma.question.findMany({
 			where: {
 				transId
 			},
@@ -50,7 +50,7 @@ export class QuestionDataBase {
 	}
 
 	async getSummaryByTransId(transId: string) {
-		await this.prisma.question.findMany({
+		return await this.prisma.question.findMany({
 			where: {
 				transId
 			},

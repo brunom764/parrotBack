@@ -51,7 +51,7 @@ export class TranscriptionController {
 		}
 	}
 
-	@Get('transcription-by-id/:id')
+	@Get('by-id/:id')
 	async getTranscriptionById(@Param('id') id: string) {
 		try {
 			const transcription = await this.transcriptionService.getTranscriptionById(id)
@@ -61,7 +61,7 @@ export class TranscriptionController {
 		}
 	}
 
-	@Get('transcription-by-userId/:id')
+	@Get('by-userId/:id')
 	async getTranscriptionsByUserId(@Param('id') userId: string) {
 		try {
 			const transcriptions =
@@ -72,7 +72,7 @@ export class TranscriptionController {
 		}
 	}
 
-	@Delete('delete/:id')
+	@Delete(':id')
 	async deleteTranscription(@Param('id') id: string) {
 		try {
 			return await this.transcriptionService.deleteTranscription(id)

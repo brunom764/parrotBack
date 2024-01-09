@@ -12,7 +12,6 @@ export class QuestionService {
 
 	async createQuestion(transId: string, question: string) {
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const newQuestion = new Question({
 				id: uuid.v4(),
 				transId,
@@ -32,9 +31,12 @@ export class QuestionService {
 		}
 	}
 
-	async updateAnswer(id: string, answer: string) {
+	async updateAnswer(id: string) {
 		try {
-			await this.questionDataBase.updateAnswer(id, answer)
+			const question = await this.questionDataBase.getQuestionById(id)
+			//const answer = await this.openAiService.questionAnswer(question)
+			const answer = 'answer'
+			await this.questionDataBase.updateAnswer(question.id, answer)
 		} catch (error) {
 			throw new Error('answer-update/failed')
 		}

@@ -15,7 +15,7 @@ export class QuestionController {
 	constructor(private readonly questionService: QuestionService) {}
 
 	@HttpCode(201)
-	@Post('create')
+	@Post()
 	async createQuestion(@Body() body: { transId: string; question: string }) {
 		try {
 			return this.questionService.createQuestion(body.transId, body.question)
@@ -33,8 +33,8 @@ export class QuestionController {
 		}
 	}
 
-	@Get('question-by-transId/:transId')
-	async getQuestionsByTransId(@Param('transId') transId: string) {
+	@Get('questions/:id')
+	async getQuestionsByTransId(@Param('id') transId: string) {
 		try {
 			return this.questionService.getQuestionsByTransId(transId)
 		} catch (error) {
@@ -42,8 +42,8 @@ export class QuestionController {
 		}
 	}
 
-	@Get('summary-by-transId/:transId')
-	async getSummaryByTransId(@Param('transId') transId: string) {
+	@Get('summary/:id')
+	async getSummaryByTransId(@Param('id') transId: string) {
 		try {
 			return this.questionService.getSummaryByTransId(transId)
 		} catch (error) {
@@ -52,12 +52,9 @@ export class QuestionController {
 	}
 
 	@Put('update-answer/:id')
-	async updateAnswer(
-		@Param('id') id: string,
-		@Body() body: { id: string; answer: string }
-	) {
+	async updateAnswer(@Param('id') questionId: string) {
 		try {
-			return this.questionService.updateAnswer(body.id, body.answer)
+			return this.questionService.updateAnswer(questionId)
 		} catch (error) {
 			throw new InternalServerErrorException('question/update-answer-failed')
 		}
