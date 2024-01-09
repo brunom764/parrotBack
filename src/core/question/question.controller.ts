@@ -9,6 +9,7 @@ import {
 	Put
 } from '@nestjs/common'
 import { QuestionService } from './question.service'
+import { QuestionDto } from './dtos'
 
 @Controller('question')
 export class QuestionController {
@@ -16,11 +17,20 @@ export class QuestionController {
 
 	@HttpCode(201)
 	@Post()
-	async createQuestion(@Body() body: { transId: string; question: string }) {
+	async createQuestion(@Body() question: QuestionDto) {
 		try {
-			return this.questionService.createQuestion(body.transId, body.question)
+			return this.questionService.createQuestion(question.transId, question.question)
 		} catch (error) {
 			throw new InternalServerErrorException('question/create-failed')
+		}
+	}
+
+	@Post()
+	async createSummary(@Body() data: { transId: string }) {
+		try {
+			return this.questionService.createSummary(data.transId)
+		} catch (error) {
+			throw new InternalServerErrorException('summary/create-failed')
 		}
 	}
 

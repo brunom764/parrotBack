@@ -1,3 +1,4 @@
+import { TranscriptionDatabase } from './../../database/transcription/index'
 import { QuestionDataBase } from './../../database/question/index'
 import { Question } from './entities/index'
 import * as uuid from 'uuid'
@@ -7,7 +8,9 @@ import { Inject, Injectable } from '@nestjs/common'
 export class QuestionService {
 	constructor(
 		@Inject(QuestionDataBase)
-		private readonly questionDataBase: QuestionDataBase
+		private readonly questionDataBase: QuestionDataBase,
+		@Inject(TranscriptionDatabase)
+		private readonly transcriptionDatabase: TranscriptionDatabase
 	) {}
 
 	async createQuestion(transId: string, question: string) {
@@ -28,6 +31,18 @@ export class QuestionService {
 			)
 		} catch (error) {
 			throw new Error('question/create-failed')
+		}
+	}
+
+	async createSummary(transId: string) {
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			const transcription = this.transcriptionDatabase.getTranscriptionById(transId)
+			//const summary = await this.openAiService.createSummary(transId, transcription)
+			const summary = 'summary'
+			await this.transcriptionDatabase.createSummary(transId, summary)
+		} catch (error) {
+			throw new Error('summary/create-failed')
 		}
 	}
 
