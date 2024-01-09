@@ -1,6 +1,7 @@
 import {
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpCode,
 	InternalServerErrorException,
@@ -53,9 +54,9 @@ export class QuestionController {
 	}
 
 	@Get('summary/:id')
-	async getSummaryByTransId(@Param('id') transId: string) {
+	async getSummaryById(@Param('id') id: string) {
 		try {
-			return this.questionService.getSummaryByTransId(transId)
+			return this.questionService.getSummaryById(id)
 		} catch (error) {
 			throw new InternalServerErrorException('summary/get-by-transId-failed')
 		}
@@ -67,6 +68,24 @@ export class QuestionController {
 			return this.questionService.updateAnswer(questionId)
 		} catch (error) {
 			throw new InternalServerErrorException('question/update-answer-failed')
+		}
+	}
+
+	@Delete('delete-question/:id')
+	async deleteQuestion(@Param('id') questionId: string) {
+		try {
+			return this.questionService.deleteQuestion(questionId)
+		} catch (error) {
+			throw new InternalServerErrorException('question/delete-failed')
+		}
+	}
+
+	@Delete('delete-summary/:id')
+	async deleteSummary(@Param('id') transId: string) {
+		try {
+			return this.questionService.deleteSummary(transId)
+		} catch (error) {
+			throw new InternalServerErrorException('summary/delete-failed')
 		}
 	}
 }

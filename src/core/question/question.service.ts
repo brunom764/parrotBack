@@ -10,7 +10,7 @@ export class QuestionService {
 		@Inject(QuestionDataBase)
 		private readonly questionDataBase: QuestionDataBase,
 		@Inject(TranscriptionDatabase)
-		private readonly transcriptionDatabase: TranscriptionDatabase
+		private readonly transcriptionDataBase: TranscriptionDatabase
 	) {}
 
 	async createQuestion(transId: string, question: string) {
@@ -37,10 +37,10 @@ export class QuestionService {
 	async createSummary(transId: string) {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const transcription = this.transcriptionDatabase.getTranscriptionById(transId)
+			const transcription = this.transcriptionDataBase.getTranscriptionById(transId)
 			//const summary = await this.openAiService.createSummary(transId, transcription)
 			const summary = 'summary'
-			await this.transcriptionDatabase.createSummary(transId, summary)
+			await this.transcriptionDataBase.createSummary(transId, summary)
 		} catch (error) {
 			throw new Error('summary/create-failed')
 		}
@@ -75,12 +75,28 @@ export class QuestionService {
 		}
 	}
 
-	async getSummaryByTransId(transId: string) {
+	async getSummaryById(id: string) {
 		try {
-			const summary = await this.questionDataBase.getSummaryByTransId(transId)
+			const summary = await this.transcriptionDataBase.getSummaryById(id)
 			return summary
 		} catch (error) {
 			throw new Error('summary/get-failed')
+		}
+	}
+
+	async deleteQuestion(id: string) {
+		try {
+			await this.questionDataBase.deleteQuestion(id)
+		} catch (error) {
+			throw new Error('question-delete/failed')
+		}
+	}
+
+	async deleteSummary(id: string) {
+		try {
+			await this.transcriptionDataBase.createSummary(id, '')
+		} catch (error) {
+			throw new Error('summary-delete/failed')
 		}
 	}
 }
