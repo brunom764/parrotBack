@@ -49,17 +49,10 @@ export class QuestionDataBase {
 		})
 	}
 
-	async getSummaryByTransId(transId: string) {
-		return await this.prisma.question.findMany({
+	async deleteQuestion(id: string) {
+		return await this.prisma.question.delete({
 			where: {
-				transId
-			},
-			select: {
-				id: true,
-				question: true,
-				answer: true,
-				createdAt: true,
-				transcription: true
+				id
 			}
 		})
 	}

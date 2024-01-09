@@ -68,6 +68,21 @@ export class TranscriptionDatabase {
 		})
 	}
 
+	async getSummaryById(id: string) {
+		return await this.prisma.transcription.findMany({
+			where: {
+				id
+			},
+			select: {
+				id: true,
+				name: true,
+				summary: true,
+				questions: true,
+				createdAt: true
+			}
+		})
+	}
+
 	async deleteTranscription(id: string) {
 		await this.prisma.transcription.delete({
 			where: {
