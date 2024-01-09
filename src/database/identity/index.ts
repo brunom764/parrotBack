@@ -7,7 +7,7 @@ export class IdentityDatabase {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
 	async createUser(id: string, email: string) {
-		await this.prisma.user.create({
+		return await this.prisma.user.create({
 			data: {
 				id,
 				email
@@ -32,7 +32,7 @@ export class IdentityDatabase {
 	}
 
 	async updateUserTier(id: string, tier: Tier) {
-		await this.prisma.user.update({
+		return await this.prisma.user.update({
 			where: {
 				id
 			},
@@ -43,7 +43,7 @@ export class IdentityDatabase {
 	}
 
 	async updateUserCredits(id: string, credits: number) {
-		await this.prisma.user.update({
+		return await this.prisma.user.update({
 			where: {
 				id
 			},
@@ -54,7 +54,7 @@ export class IdentityDatabase {
 	}
 
 	async deleteUser(id: string) {
-		await this.prisma.user.delete({
+		return await this.prisma.user.delete({
 			where: {
 				id
 			}
