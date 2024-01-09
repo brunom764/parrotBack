@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TranscriptionDatabase } from './../../database/transcription/index'
 import { QuestionDataBase } from './../../database/question/index'
 import { Question } from './entities/index'
 import * as uuid from 'uuid'
 import { Inject, Injectable } from '@nestjs/common'
+import { OpenaiService } from 'src/services/openai/openai.service'
+import { TranscriptText } from '@core/transcription/entities'
 
 @Injectable()
 export class QuestionService {
@@ -10,7 +13,9 @@ export class QuestionService {
 		@Inject(QuestionDataBase)
 		private readonly questionDataBase: QuestionDataBase,
 		@Inject(TranscriptionDatabase)
-		private readonly transcriptionDataBase: TranscriptionDatabase
+		private readonly transcriptionDataBase: TranscriptionDatabase,
+		@Inject(OpenaiService)
+		private readonly openAiService: OpenaiService
 	) {}
 
 	async createQuestion(transId: string, question: string) {
@@ -22,7 +27,12 @@ export class QuestionService {
 				createdAt: new Date()
 			})
 
-			//const answerText = (await this.openAiService.questionAnswer(question))
+			const transcription = await this.transcriptionDataBase.getTranscriptionById(transId)
+
+			const answerText = await this.openAiService.genereateAnswer(
+				question,
+				transcription.text as TranscriptText[]
+			)
 			await this.questionDataBase.createQuestion(
 				newQuestion.id,
 				newQuestion.transId,
@@ -36,10 +46,10 @@ export class QuestionService {
 
 	async createSummary(transId: string) {
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const transcription = this.transcriptionDataBase.getTranscriptionById(transId)
-			//const summary = await this.openAiService.createSummary(transId, transcription)
-			const summary = 'summary'
+			const transcription = await this.transcriptionDataBase.getTranscriptionById(transId)
+			const summary = await this.openAiService.generateSummary(
+				transcription.text as TranscriptText[]
+			)
 			await this.transcriptionDataBase.createSummary(transId, summary)
 		} catch (error) {
 			throw new Error('summary/create-failed')
@@ -49,8 +59,13 @@ export class QuestionService {
 	async updateAnswer(id: string) {
 		try {
 			const question = await this.questionDataBase.getQuestionById(id)
-			//const answer = await this.openAiService.questionAnswer(question)
-			const answer = 'answer'
+			const transcription = await this.transcriptionDataBase.getTranscriptionById(
+				question.transId
+			)
+			const answer = await this.openAiService.genereateAnswer(
+				question.question,
+				transcription.text as TranscriptText[]
+			)
 			await this.questionDataBase.updateAnswer(question.id, answer)
 		} catch (error) {
 			throw new Error('answer-update/failed')

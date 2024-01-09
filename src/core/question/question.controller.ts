@@ -17,7 +17,7 @@ export class QuestionController {
 	constructor(private readonly questionService: QuestionService) {}
 
 	@HttpCode(201)
-	@Post()
+	@Post('create-question')
 	async createQuestion(@Body() question: QuestionDto) {
 		try {
 			return this.questionService.createQuestion(question.transId, question.question)
@@ -26,7 +26,7 @@ export class QuestionController {
 		}
 	}
 
-	@Post()
+	@Post('create-summary')
 	async createSummary(@Body() data: { transId: string }) {
 		try {
 			return this.questionService.createSummary(data.transId)
@@ -71,7 +71,7 @@ export class QuestionController {
 		}
 	}
 
-	@Delete('delete-question/:id')
+	@Delete('question/:id')
 	async deleteQuestion(@Param('id') questionId: string) {
 		try {
 			return this.questionService.deleteQuestion(questionId)
@@ -80,7 +80,7 @@ export class QuestionController {
 		}
 	}
 
-	@Delete('delete-summary/:id')
+	@Delete('summary/:id')
 	async deleteSummary(@Param('id') transId: string) {
 		try {
 			return this.questionService.deleteSummary(transId)
