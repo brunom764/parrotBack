@@ -67,4 +67,12 @@ export class TranscriptionDatabase {
 			}
 		})
 	}
+
+	async deleteTranscription(id: string) {
+		await this.prisma.transcription.delete({
+			where: {
+				id
+			}
+		})
+	}
 }

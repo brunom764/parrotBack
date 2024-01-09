@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpCode,
 	InternalServerErrorException,
@@ -68,6 +69,15 @@ export class TranscriptionController {
 			return transcriptions
 		} catch (error) {
 			throw new InternalServerErrorException('transcriptions/get-failed')
+		}
+	}
+
+	@Delete('delete/:id')
+	async deleteTranscription(@Param('id') id: string) {
+		try {
+			return await this.transcriptionService.deleteTranscription(id)
+		} catch (error) {
+			throw new InternalServerErrorException('transcription/delete-failed')
 		}
 	}
 }
