@@ -33,11 +33,11 @@ export class QuestionService {
 				question,
 				transcription.text as TranscriptText[]
 			)
-			await this.questionDataBase.createQuestion(
+			return await this.questionDataBase.createQuestion(
 				newQuestion.id,
 				newQuestion.transId,
-				question
-				//answerText
+				question,
+				answerText
 			)
 		} catch (error) {
 			throw new Error('question/create-failed')

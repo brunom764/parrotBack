@@ -64,8 +64,10 @@ export class TranscriptionController {
 	@Get('by-userId/:id')
 	async getTranscriptionsByUserId(@Param('id') userId: string) {
 		try {
+			console.log(userId)
 			const transcriptions =
 				await this.transcriptionService.getTranscriptionsByUserId(userId)
+			console.log(transcriptions)
 			return transcriptions
 		} catch (error) {
 			throw new InternalServerErrorException('transcriptions/get-failed')
