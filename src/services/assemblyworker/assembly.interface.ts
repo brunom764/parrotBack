@@ -1,9 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface IPollingData {
-	id: string
-	status: string
-}
-
 export interface IResponseData {
 	id: string
 }

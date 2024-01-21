@@ -69,4 +69,12 @@ export class TranscriptionService {
 			throw new Error('transcriptions/get-failed')
 		}
 	}
+
+	async deleteTranscription(id: string) {
+		try {
+			await this.transcriptionDatabase.deleteTranscription(id)
+		} catch (error) {
+			throw new Error('transcription-delete/failed')
+		}
+	}
 }

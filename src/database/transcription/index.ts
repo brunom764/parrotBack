@@ -13,7 +13,7 @@ export class TranscriptionDatabase {
 		duration?: number,
 		text?: TranscriptText[]
 	) {
-		await this.prisma.transcription.create({
+		return await this.prisma.transcription.create({
 			data: {
 				id,
 				userId,
@@ -25,7 +25,7 @@ export class TranscriptionDatabase {
 	}
 
 	async updateTranscription(id: string, transcript: TranscriptText[]) {
-		await this.prisma.transcription.update({
+		return await this.prisma.transcription.update({
 			where: {
 				id
 			},
@@ -36,7 +36,7 @@ export class TranscriptionDatabase {
 	}
 
 	async createSummary(id: string, summary: string) {
-		await this.prisma.transcription.update({
+		return await this.prisma.transcription.update({
 			where: {
 				id
 			},
@@ -47,7 +47,7 @@ export class TranscriptionDatabase {
 	}
 
 	async getTranscriptionById(id: string) {
-		await this.prisma.transcription.findUnique({
+		return await this.prisma.transcription.findUnique({
 			where: {
 				id
 			}
@@ -55,7 +55,7 @@ export class TranscriptionDatabase {
 	}
 
 	async getTranscriptionsByUserId(userId: string) {
-		await this.prisma.transcription.findMany({
+		return await this.prisma.transcription.findMany({
 			where: {
 				userId
 			},
@@ -64,6 +64,29 @@ export class TranscriptionDatabase {
 				name: true,
 				duration: true,
 				createdAt: true
+			}
+		})
+	}
+
+	async getSummaryById(id: string) {
+		return await this.prisma.transcription.findMany({
+			where: {
+				id
+			},
+			select: {
+				id: true,
+				name: true,
+				summary: true,
+				questions: true,
+				createdAt: true
+			}
+		})
+	}
+
+	async deleteTranscription(id: string) {
+		return await this.prisma.transcription.delete({
+			where: {
+				id
 			}
 		})
 	}

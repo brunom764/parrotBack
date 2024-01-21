@@ -2,6 +2,8 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Delete,
+	Get,
 	HttpCode,
 	InternalServerErrorException,
 	Param,
@@ -49,6 +51,7 @@ export class TranscriptionController {
 		}
 	}
 
+	@Get('by-id/:id')
 	async getTranscriptionById(@Param('id') id: string) {
 		try {
 			const transcription = await this.transcriptionService.getTranscriptionById(id)
@@ -58,13 +61,25 @@ export class TranscriptionController {
 		}
 	}
 
+	@Get('by-userId/:id')
 	async getTranscriptionsByUserId(@Param('id') userId: string) {
 		try {
+			console.log(userId)
 			const transcriptions =
 				await this.transcriptionService.getTranscriptionsByUserId(userId)
+			console.log(transcriptions)
 			return transcriptions
 		} catch (error) {
 			throw new InternalServerErrorException('transcriptions/get-failed')
+		}
+	}
+
+	@Delete(':id')
+	async deleteTranscription(@Param('id') id: string) {
+		try {
+			return await this.transcriptionService.deleteTranscription(id)
+		} catch (error) {
+			throw new InternalServerErrorException('transcription/delete-failed')
 		}
 	}
 }
