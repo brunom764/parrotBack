@@ -15,8 +15,6 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import * as multer from 'multer'
 import { TranscriptionService } from './transcription.service'
 
-// ...
-
 @Controller('transcription')
 export class TranscriptionController {
 	constructor(private readonly transcriptionService: TranscriptionService) {}
@@ -30,7 +28,7 @@ export class TranscriptionController {
 				filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
 			}),
 			fileFilter: (req, file, cb) => {
-				if (file.mimetype === 'audio/mpeg') {
+				if (file.mimetype.startsWith('audio/')) {
 					cb(null, true)
 				} else {
 					cb(new BadRequestException('Invalid file type'), false)
@@ -41,7 +39,7 @@ export class TranscriptionController {
 	async uploadAudio(
 		@UploadedFile() file,
 		@Param('id') userId: string,
-		@Body() name: string
+		@Body('name') name: string
 	): Promise<void> {
 		try {
 			const filePath = './uploads/' + file.filename
@@ -64,10 +62,8 @@ export class TranscriptionController {
 	@Get('by-userId/:id')
 	async getTranscriptionsByUserId(@Param('id') userId: string) {
 		try {
-			console.log(userId)
 			const transcriptions =
 				await this.transcriptionService.getTranscriptionsByUserId(userId)
-			console.log(transcriptions)
 			return transcriptions
 		} catch (error) {
 			throw new InternalServerErrorException('transcriptions/get-failed')
