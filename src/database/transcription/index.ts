@@ -13,14 +13,44 @@ export class TranscriptionDatabase {
 		duration?: number,
 		text?: TranscriptText[]
 	) {
-		return await this.prisma.transcription.create({
-			data: {
-				id,
-				userId,
-				name,
-				duration,
-				text
+		return this.prisma.$transaction(async (prisma) => {
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId
+				},
+				select: {
+					id: true,
+					credits: true
+				}
+			})
+
+			if (!user) {
+				throw new Error('user/get-failed')
 			}
+
+			const transcriptionCreditCount = duration / 60
+			if (user.credits === 0 || user.credits < transcriptionCreditCount) {
+				throw new Error('user/credits-insufficient')
+			}
+
+			await prisma.user.update({
+				where: {
+					id: userId
+				},
+				data: {
+					credits: user.credits - transcriptionCreditCount
+				}
+			})
+
+			await prisma.transcription.create({
+				data: {
+					id,
+					userId,
+					name,
+					duration,
+					text
+				}
+			})
 		})
 	}
 
@@ -36,13 +66,55 @@ export class TranscriptionDatabase {
 	}
 
 	async createSummary(id: string, summary: string) {
-		return await this.prisma.transcription.update({
-			where: {
-				id
-			},
-			data: {
-				summary
+		return this.prisma.$transaction(async (prisma) => {
+			const { userId } = await prisma.transcription.findUnique({
+				where: {
+					id: id
+				},
+				select: {
+					userId: true
+				}
+			})
+
+			if (!userId) {
+				throw new Error('userId/get-failed')
 			}
+
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId
+				},
+				select: {
+					id: true,
+					credits: true
+				}
+			})
+
+			if (!user) {
+				throw new Error('user/get-failed')
+			}
+
+			if (user.credits === 0) {
+				throw new Error('user/credits-insufficient')
+			}
+
+			await prisma.user.update({
+				where: {
+					id: userId
+				},
+				data: {
+					credits: --user.credits
+				}
+			})
+
+			await this.prisma.transcription.update({
+				where: {
+					id
+				},
+				data: {
+					summary
+				}
+			})
 		})
 	}
 

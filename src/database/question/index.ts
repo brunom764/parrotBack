@@ -6,13 +6,55 @@ export class QuestionDataBase {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
 	async createQuestion(id: string, transId: string, question: string, answer?: string) {
-		return await this.prisma.question.create({
-			data: {
-				id,
-				transId,
-				question,
-				answer
+		return this.prisma.$transaction(async (prisma) => {
+			const { userId } = await prisma.transcription.findUnique({
+				where: {
+					id: transId
+				},
+				select: {
+					userId: true
+				}
+			})
+
+			if (!userId) {
+				throw new Error('userId/get-failed')
 			}
+
+			const user = await prisma.user.findUnique({
+				where: {
+					id: userId
+				},
+				select: {
+					id: true,
+					credits: true
+				}
+			})
+
+			if (!user) {
+				throw new Error('user/get-failed')
+			}
+
+			if (user.credits === 0) {
+				throw new Error('user/credits-insufficient')
+			}
+
+			await prisma.user.update({
+				where: {
+					id: userId
+				},
+				data: {
+					credits: --user.credits
+				}
+			})
+
+			await prisma.question.create({
+				data: {
+					id,
+					transId,
+					question,
+					answer
+				}
+			})
 		})
 	}
 
