@@ -19,6 +19,14 @@ export class IdentityRepository {
 		return await this.prisma.user.findUnique({
 			where: {
 				email
+			},
+			select: {
+				id: true,
+				email: true,
+				credits: true,
+				tier: true,
+				createdAt: true,
+				updatedAt: true
 			}
 		})
 	}
@@ -27,6 +35,14 @@ export class IdentityRepository {
 		return await this.prisma.user.findUnique({
 			where: {
 				id
+			},
+			select: {
+				id: true,
+				email: true,
+				credits: true,
+				tier: true,
+				createdAt: true,
+				updatedAt: true
 			}
 		})
 	}
