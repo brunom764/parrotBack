@@ -76,4 +76,8 @@ export class IdentityRepository {
 			}
 		})
 	}
+
+	async addMonthlyBonus() {
+		return
+	}
 }

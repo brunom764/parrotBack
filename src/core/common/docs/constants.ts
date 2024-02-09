@@ -84,6 +84,11 @@ export const USER_ID_PARAM = {
 	type: 'string'
 }
 
+export const MONTHLY_BONUS_API_RESPONSE = {
+	status: 200,
+	description: 'Execute the cron job to add the monthly bonus'
+}
+
 export const GET_USER_API_RESPONSE = {
 	status: 200,
 	description: 'Ok',

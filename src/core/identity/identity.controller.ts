@@ -25,10 +25,12 @@ import {
 	EMAIL_PARAM,
 	GET_USER_API_RESPONSE,
 	INTERNAL_SERVER_ERROR_API_RESPONSE,
+	MONTHLY_BONUS_API_RESPONSE,
 	NOT_FOUND_API_RESPONSE,
 	UPDATE_USER_API_RESPONSE,
 	USER_ID_PARAM
 } from '@core/common/docs/constants'
+import { Cron } from '@nestjs/schedule'
 
 @ApiResponse(INTERNAL_SERVER_ERROR_API_RESPONSE)
 @ApiResponse(BAD_REQUEST_API_RESPONSE)
@@ -130,6 +132,16 @@ export class IdentityController {
 			return await this.identityService.deleteUser(id)
 		} catch (error) {
 			throw new InternalServerErrorException('user/delete-failed')
+		}
+	}
+
+	@Cron('0 00 06 * * 1-5', { timeZone: 'America/Sao_Paulo' })
+	@ApiResponse(MONTHLY_BONUS_API_RESPONSE)
+	async handleCron() {
+		try {
+			await this.identityService.addMonthlyBonus()
+		} catch (error) {
+			throw new InternalServerErrorException('user/add-monthly-bonus-failed')
 		}
 	}
 }
