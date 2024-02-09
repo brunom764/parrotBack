@@ -1,9 +1,9 @@
 import { Tier } from '@core/identity/entities'
 import { Inject, Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/services/prisma.service'
+import { PrismaService } from 'src/services/prisma/prisma.service'
 
 @Injectable()
-export class IdentityDatabase {
+export class IdentityRepository {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
 	async createUser(id: string, email: string) {

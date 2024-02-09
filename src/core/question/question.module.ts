@@ -1,15 +1,14 @@
-import { PrismaService } from 'src/services/prisma.service'
 import { Module } from '@nestjs/common'
 import { QuestionService } from './question.service'
-import { QuestionDataBase } from 'src/database/question'
 import { QuestionController } from './question.controller'
-import { TranscriptionDatabase } from 'src/database/transcription'
 import { OpenaiModule } from 'src/services/openai/openai.module'
+import { TranscriptionRepository } from '@core/transcription/transcription.repository'
+import { QuestionRepository } from './question.repository'
 
 @Module({
 	imports: [OpenaiModule],
 	controllers: [QuestionController],
-	providers: [QuestionService, PrismaService, QuestionDataBase, TranscriptionDatabase],
+	providers: [QuestionService, QuestionRepository, TranscriptionRepository],
 	exports: [QuestionService]
 })
 export class QuestionModule {}

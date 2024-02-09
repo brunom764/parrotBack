@@ -1,9 +1,9 @@
 import { TranscriptText } from '@core/transcription/entities'
 import { Inject, Injectable } from '@nestjs/common'
-import { PrismaService } from 'src/services/prisma.service'
+import { PrismaService } from 'src/services/prisma/prisma.service'
 
 @Injectable()
-export class TranscriptionDatabase {
+export class TranscriptionRepository {
 	constructor(@Inject(PrismaService) protected prisma: PrismaService) {}
 
 	async createTranscription(
@@ -28,7 +28,7 @@ export class TranscriptionDatabase {
 				throw new Error('user/get-failed')
 			}
 
-			const transcriptionCreditCount = duration / 60
+			const transcriptionCreditCount = Math.ceil((duration * 10) / 60)
 			if (user.credits === 0 || user.credits < transcriptionCreditCount) {
 				throw new Error('user/credits-insufficient')
 			}
