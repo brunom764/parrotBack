@@ -1,74 +1,49 @@
 import { Injectable, Inject } from '@nestjs/common'
-import { IdentityDatabase } from 'src/database/identity'
 import { Tier } from './entities'
 import { getAuth } from 'firebase-admin/auth'
+import { IdentityRepository } from './identity.repository'
 
 @Injectable()
 export class IdentityService {
-	constructor(@Inject(IdentityDatabase) protected identityDatabase: IdentityDatabase) {}
+	constructor(
+		@Inject(IdentityRepository) protected identityRepository: IdentityRepository
+	) {}
 
 	async register(user: { email: string; password: string }) {
-		try {
-			const account = await getAuth().createUser({
-				email: user.email,
-				emailVerified: true,
-				password: user.password,
-				displayName: user.email
-			})
-			await this.identityDatabase.createUser(account.uid, user.email)
-		} catch (error) {
-			throw new Error('user-register/failed')
-		}
+		const account = await getAuth().createUser({
+			email: user.email,
+			emailVerified: true,
+			password: user.password,
+			displayName: user.email
+		})
+		await this.identityRepository.createUser(account.uid, user.email)
 	}
 
 	async createAccountByLoginWithGoogle(email: string) {
-		try {
-			const user = await this.identityDatabase.getUserByEmail(email)
-			if (!user) {
-				const accountInfo = await getAuth().getUserByEmail(email)
-				await this.identityDatabase.createUser(accountInfo.uid, email)
-			}
-		} catch (error) {
-			throw new Error('user-verify-exists/failed')
+		const user = await this.identityRepository.getUserByEmail(email)
+		if (!user) {
+			const accountInfo = await getAuth().getUserByEmail(email)
+			await this.identityRepository.createUser(accountInfo.uid, email)
 		}
 	}
 
 	async getUserByEmail(email: string) {
-		try {
-			return await this.identityDatabase.getUserByEmail(email)
-		} catch (error) {
-			throw new Error('user-get-by-email/failed')
-		}
+		return await this.identityRepository.getUserByEmail(email)
 	}
 
 	async getUserById(id: string) {
-		try {
-			return await this.identityDatabase.getUserById(id)
-		} catch (error) {
-			throw new Error('user-get-by-id/failed')
-		}
+		return await this.identityRepository.getUserById(id)
 	}
+
 	async updateTier(userId: string, tier: Tier) {
-		try {
-			await this.identityDatabase.updateUserTier(userId, tier)
-		} catch (error) {
-			throw new Error('user-update/failed')
-		}
+		await this.identityRepository.updateUserTier(userId, tier)
 	}
 
 	async updateCredits(userId: string, credits: number) {
-		try {
-			await this.identityDatabase.updateUserCredits(userId, credits)
-		} catch (error) {
-			throw new Error('user-update-credits/failed')
-		}
+		await this.identityRepository.updateUserCredits(userId, credits)
 	}
 
 	async deleteUser(userId: string) {
-		try {
-			await this.identityDatabase.deleteUser(userId)
-		} catch (error) {
-			throw new Error('user-delete/failed')
-		}
+		await this.identityRepository.deleteUser(userId)
 	}
 }

@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common'
 import { IdentityController } from './identity.controller'
 import { IdentityService } from './identity.service'
-import { PrismaService } from 'src/services/prisma.service'
-import { IdentityDatabase } from 'src/database/identity'
+import { IdentityRepository } from './identity.repository'
 
 @Module({
 	controllers: [IdentityController],
-	providers: [IdentityService, PrismaService, IdentityDatabase],
+	providers: [IdentityService, IdentityRepository],
 	exports: [IdentityService]
 })
 export class IdentityModule {}
