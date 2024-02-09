@@ -135,7 +135,7 @@ export class IdentityController {
 		}
 	}
 
-	@Cron('0 00 06 * * 1-5', { timeZone: 'America/Sao_Paulo' })
+	@Cron('0 0 6 1 * *', { timeZone: 'America/Sao_Paulo' })
 	@ApiResponse(MONTHLY_BONUS_API_RESPONSE)
 	async handleCron() {
 		try {

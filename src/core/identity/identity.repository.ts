@@ -78,6 +78,38 @@ export class IdentityRepository {
 	}
 
 	async addMonthlyBonus() {
-		return
+		const monthlyBonus = 10
+		return this.prisma.$transaction(async () => {
+			await this.prisma.user.updateMany({
+				where: {
+					tier: Tier.FREE
+				},
+				data: {
+					credits: {
+						increment: monthlyBonus
+					}
+				}
+			})
+			await this.prisma.user.updateMany({
+				where: {
+					tier: Tier.BASIC
+				},
+				data: {
+					credits: {
+						increment: monthlyBonus * 10
+					}
+				}
+			})
+			await this.prisma.user.updateMany({
+				where: {
+					tier: Tier.PREMIUM
+				},
+				data: {
+					credits: {
+						increment: monthlyBonus * 100
+					}
+				}
+			})
+		})
 	}
 }

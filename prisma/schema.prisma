@@ -43,5 +43,6 @@ model Question {
  
 enum Tier {
   FREE
+  BASIC
   PREMIUM 
 }
