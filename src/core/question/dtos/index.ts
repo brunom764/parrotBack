@@ -8,3 +8,8 @@ export class QuestionDto {
 	@IsString({ message: 'question must be a string' })
 	question: string
 }
+
+export class CreateSummaryDto {
+	@IsString({ message: 'transId must be a string' })
+	transId: string
+}

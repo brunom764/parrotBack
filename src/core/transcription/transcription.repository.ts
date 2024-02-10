@@ -107,12 +107,17 @@ export class TranscriptionRepository {
 				}
 			})
 
-			await this.prisma.transcription.update({
+			return await this.prisma.transcription.update({
 				where: {
 					id
 				},
 				data: {
 					summary
+				},
+				select: {
+					id: true,
+					name: true,
+					summary: true
 				}
 			})
 		})
@@ -122,6 +127,14 @@ export class TranscriptionRepository {
 		return await this.prisma.transcription.findUnique({
 			where: {
 				id
+			},
+			select: {
+				id: true,
+				userId: true,
+				name: true,
+				duration: true,
+				text: true,
+				createdAt: true
 			}
 		})
 	}
@@ -148,9 +161,7 @@ export class TranscriptionRepository {
 			select: {
 				id: true,
 				name: true,
-				summary: true,
-				questions: true,
-				createdAt: true
+				summary: true
 			}
 		})
 	}

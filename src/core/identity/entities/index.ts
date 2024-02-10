@@ -1,5 +1,6 @@
 export enum Tier {
 	FREE = 'FREE',
+	BASIC = 'BASIC',
 	PREMIUM = 'PREMIUM'
 }
 

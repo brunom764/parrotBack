@@ -46,4 +46,8 @@ export class IdentityService {
 	async deleteUser(userId: string) {
 		await this.identityRepository.deleteUser(userId)
 	}
+
+	async addMonthlyBonus() {
+		return await this.identityRepository.addMonthlyBonus()
+	}
 }
