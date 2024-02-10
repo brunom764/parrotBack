@@ -19,6 +19,7 @@ import {
 	CREATE_TRANSCRIPTION_API_RESPONSE,
 	DELETE_TRANSCRIPTION_API_RESPONSE,
 	GET_TRANSCRIPTION_API_RESPONSE,
+	GET_TRANSCRIPTIONS_API_RESPONSE,
 	INTERNAL_SERVER_ERROR_API_RESPONSE,
 	NOT_FOUND_API_RESPONSE,
 	TRANS_ID_PARAM,
@@ -56,7 +57,7 @@ export class TranscriptionController {
 	async uploadAudio(
 		@UploadedFile() file,
 		@Param('id') userId: string,
-		@Body('name') data: CreateTranscriptionDto
+		@Body() data: CreateTranscriptionDto
 	): Promise<void> {
 		try {
 			const filePath = './uploads/' + file.filename
@@ -72,22 +73,19 @@ export class TranscriptionController {
 	@Get('by-id/:id')
 	async getTranscriptionById(@Param('id') id: string) {
 		try {
-			const transcription = await this.transcriptionService.getTranscriptionById(id)
-			return transcription
+			return await this.transcriptionService.getTranscriptionById(id)
 		} catch (error) {
 			throw new InternalServerErrorException('transcription/get-failed')
 		}
 	}
 
 	@ApiParam(USER_ID_PARAM)
-	@ApiResponse(GET_TRANSCRIPTION_API_RESPONSE)
+	@ApiResponse(GET_TRANSCRIPTIONS_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Get('by-userId/:id')
-	async getTranscriptionsByUserId(@Param('id') userId: string) {
+	async getTranscriptionsByUserId(@Param('id') id: string) {
 		try {
-			const transcriptions =
-				await this.transcriptionService.getTranscriptionsByUserId(userId)
-			return transcriptions
+			return await this.transcriptionService.getTranscriptionsByUserId(id)
 		} catch (error) {
 			throw new InternalServerErrorException('transcriptions/get-failed')
 		}

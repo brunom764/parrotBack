@@ -47,12 +47,19 @@ export class QuestionRepository {
 				}
 			})
 
-			await prisma.question.create({
+			return await prisma.question.create({
 				data: {
 					id,
 					transId,
 					question,
 					answer
+				},
+				select: {
+					id: true,
+					transId: true,
+					question: true,
+					answer: true,
+					createdAt: true
 				}
 			})
 		})
@@ -65,6 +72,13 @@ export class QuestionRepository {
 			},
 			data: {
 				answer
+			},
+			select: {
+				id: true,
+				transId: true,
+				question: true,
+				answer: true,
+				createdAt: true
 			}
 		})
 	}

@@ -19,10 +19,10 @@ import {
 	GET_QUESTION_API_RESPONSE,
 	NOT_FOUND_API_RESPONSE,
 	QUESTION_ID_PARAM,
-	SUMMARY_ID_PARAM,
 	GET_SUMMARY_API_RESPONSE,
 	UPDATE_ANSWER_API_RESPONSE,
 	DELETE_QUESTION_API_RESPONSE,
+	GET_QUESTIONS_API_RESPONSE,
 	TRANS_ID_PARAM,
 	DELETE_SUMMARY_API_RESPONSE
 } from '@core/common/docs/constants'
@@ -73,18 +73,18 @@ export class QuestionController {
 	}
 
 	@ApiParam(TRANS_ID_PARAM)
-	@ApiResponse(GET_QUESTION_API_RESPONSE)
+	@ApiResponse(GET_QUESTIONS_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Get('questions/:id')
-	async getQuestionsByTransId(@Param('id') transId: string) {
+	async getQuestionsByTransId(@Param('id') id: string) {
 		try {
-			return await this.questionService.getQuestionsByTransId(transId)
+			return await this.questionService.getQuestionsByTransId(id)
 		} catch (error) {
 			throw new InternalServerErrorException('question/get-by-transId-failed')
 		}
 	}
 
-	@ApiParam(SUMMARY_ID_PARAM)
+	@ApiParam(TRANS_ID_PARAM)
 	@ApiResponse(GET_SUMMARY_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Get('summary/:id')
@@ -100,9 +100,9 @@ export class QuestionController {
 	@ApiResponse(UPDATE_ANSWER_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Put('update-answer/:id')
-	async updateAnswer(@Param('id') questionId: string) {
+	async updateAnswer(@Param('id') id: string) {
 		try {
-			return await this.questionService.updateAnswer(questionId)
+			return await this.questionService.updateAnswer(id)
 		} catch (error) {
 			throw new InternalServerErrorException('question/update-answer-failed')
 		}
@@ -112,9 +112,9 @@ export class QuestionController {
 	@ApiResponse(DELETE_QUESTION_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Delete('question/:id')
-	async deleteQuestion(@Param('id') questionId: string) {
+	async deleteQuestion(@Param('id') id: string) {
 		try {
-			return await this.questionService.deleteQuestion(questionId)
+			return await this.questionService.deleteQuestion(id)
 		} catch (error) {
 			throw new InternalServerErrorException('question/delete-failed')
 		}
@@ -123,8 +123,8 @@ export class QuestionController {
 	@ApiParam(TRANS_ID_PARAM)
 	@ApiResponse(DELETE_SUMMARY_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Delete('summary/:id')
-	async deleteSummary(@Param('id') transId: string) {
+	@Delete('summary/:transId')
+	async deleteSummary(@Param('transId') transId: string) {
 		try {
 			return await this.questionService.deleteSummary(transId)
 		} catch (error) {

@@ -103,11 +103,16 @@ export const GET_USER_API_RESPONSE = {
 			credits: {
 				type: 'number'
 			},
-			createdAt: {
+			tier: {
 				type: 'string'
 			},
+			createdAt: {
+				type: 'string',
+				format: 'date-time'
+			},
 			updatedAt: {
-				type: 'string'
+				type: 'string',
+				format: 'date-time'
 			}
 		}
 	}
@@ -116,7 +121,26 @@ export const GET_USER_API_RESPONSE = {
 export const UPDATE_ANSWER_API_RESPONSE = {
 	status: 200,
 	description: 'Resposta atualizada com sucesso',
-	schema: EMPTY_SCHEMA_API_RESPONSE
+	schema: {
+		properties: {
+			id: {
+				type: 'string'
+			},
+			transId: {
+				type: 'string'
+			},
+			question: {
+				type: 'string'
+			},
+			answer: {
+				type: 'string'
+			},
+			createdAt: {
+				type: 'string',
+				format: 'date-time'
+			}
+		}
+	}
 }
 
 export const DELETE_QUESTION_API_RESPONSE = {
@@ -133,7 +157,7 @@ export const QUESTION_ID_PARAM = {
 }
 
 export const TRANS_ID_PARAM = {
-	name: 'transId',
+	name: 'id',
 	required: true,
 	description: 'Id da transcrição',
 	type: 'string'
@@ -142,7 +166,26 @@ export const TRANS_ID_PARAM = {
 export const CREATE_QUESTION_API_RESPONSE = {
 	status: 201,
 	description: 'Questão criada com sucesso',
-	schema: EMPTY_SCHEMA_API_RESPONSE
+	schema: {
+		properties: {
+			id: {
+				type: 'string'
+			},
+			transId: {
+				type: 'string'
+			},
+			question: {
+				type: 'string'
+			},
+			answer: {
+				type: 'string'
+			},
+			createdAt: {
+				type: 'string',
+				format: 'date-time'
+			}
+		}
+	}
 }
 
 export const GET_QUESTION_API_RESPONSE = {
@@ -163,7 +206,34 @@ export const GET_QUESTION_API_RESPONSE = {
 				type: 'string'
 			},
 			createdAt: {
-				type: 'string'
+				type: 'string',
+				format: 'date-time'
+			}
+		}
+	}
+}
+
+export const GET_QUESTIONS_API_RESPONSE = {
+	status: 200,
+	description: 'Ok',
+	schema: {
+		type: 'array',
+		items: {
+			type: 'object',
+			properties: {
+				id: {
+					type: 'string'
+				},
+				createdAt: {
+					type: 'string',
+					format: 'date-time'
+				},
+				question: {
+					type: 'string'
+				},
+				answer: {
+					type: 'string'
+				}
 			}
 		}
 	}
@@ -171,21 +241,26 @@ export const GET_QUESTION_API_RESPONSE = {
 
 export const DELETE_SUMMARY_API_RESPONSE = {
 	status: 200,
-	description: 'Questão deletada com sucesso',
+	description: 'Resumo deletado com sucesso',
 	schema: EMPTY_SCHEMA_API_RESPONSE
-}
-
-export const SUMMARY_ID_PARAM = {
-	name: 'id',
-	required: true,
-	description: 'Id do resumo',
-	type: 'string'
 }
 
 export const CREATE_SUMMARY_DTO_API_RESPONSE = {
 	status: 201,
-	description: 'Questão criada com sucesso',
-	schema: EMPTY_SCHEMA_API_RESPONSE
+	description: 'Resumo criado com sucesso',
+	schema: {
+		properties: {
+			id: {
+				type: 'string'
+			},
+			name: {
+				type: 'string'
+			},
+			summary: {
+				type: 'string'
+			}
+		}
+	}
 }
 
 export const GET_SUMMARY_API_RESPONSE = {
@@ -199,13 +274,7 @@ export const GET_SUMMARY_API_RESPONSE = {
 			name: {
 				type: 'string'
 			},
-			createdAt: {
-				type: 'string'
-			},
 			summary: {
-				type: 'string'
-			},
-			questions: {
 				type: 'string'
 			}
 		}
@@ -220,8 +289,34 @@ export const CREATE_TRANSCRIPTION_API_RESPONSE = {
 
 export const DELETE_TRANSCRIPTION_API_RESPONSE = {
 	status: 200,
-	description: 'Questão deletada com sucesso',
+	description: 'Transcrição deletada com sucesso',
 	schema: EMPTY_SCHEMA_API_RESPONSE
+}
+
+export const GET_TRANSCRIPTIONS_API_RESPONSE = {
+	status: 200,
+	description: 'Ok',
+	schema: {
+		type: 'array',
+		items: {
+			type: 'object',
+			properties: {
+				id: {
+					type: 'string'
+				},
+				name: {
+					type: 'string'
+				},
+				duration: {
+					type: 'number'
+				},
+				createdAt: {
+					type: 'string',
+					format: 'date-time'
+				}
+			}
+		}
+	}
 }
 
 export const GET_TRANSCRIPTION_API_RESPONSE = {
@@ -239,16 +334,34 @@ export const GET_TRANSCRIPTION_API_RESPONSE = {
 				type: 'string'
 			},
 			text: {
-				type: 'string'
+				type: 'array',
+				items: {
+					type: 'object',
+					properties: {
+						confidence: {
+							type: 'number'
+						},
+						end: {
+							type: 'number'
+						},
+						speaker: {
+							type: 'string'
+						},
+						start: {
+							type: 'number'
+						},
+						text: {
+							type: 'string'
+						}
+					}
+				}
 			},
 			duration: {
 				type: 'number'
 			},
-			summary: {
-				type: 'string'
-			},
 			createdAt: {
-				type: 'string'
+				type: 'string',
+				format: 'date-time'
 			}
 		}
 	}
