@@ -23,7 +23,7 @@ export class UpdateUserTierDto {
 	tier: Tier
 }
 
-export class updateUserCreditsDto {
+export class UpdateUserCreditsDto {
 	@IsInt({ message: 'credits must be a number' })
 	credits: number
 }

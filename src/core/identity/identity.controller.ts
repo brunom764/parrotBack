@@ -14,7 +14,7 @@ import {
 	LoginWithGoogleDto,
 	UpdateUserTierDto,
 	UserDto,
-	updateUserCreditsDto
+	UpdateUserCreditsDto
 } from './dtos'
 import { User } from './entities'
 import { ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger'
@@ -106,14 +106,14 @@ export class IdentityController {
 	}
 
 	@HttpCode(200)
-	@ApiBody({ type: updateUserCreditsDto })
+	@ApiBody({ type: UpdateUserCreditsDto })
 	@ApiParam(USER_ID_PARAM)
 	@ApiResponse(UPDATE_USER_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
 	@Put('update-credits/:id')
 	async updateCredits(
 		@Param('id') id: string,
-		@Body() data: updateUserCreditsDto
+		@Body() data: UpdateUserCreditsDto
 	): Promise<void> {
 		try {
 			return await this.identityService.updateCredits(id, data.credits)
