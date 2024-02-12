@@ -24,4 +24,8 @@ export class FirebaseService {
 		const user = await this.auth.getUserByEmail(email)
 		return user
 	}
+
+	async deleteUser(uid: string) {
+		await this.auth.deleteUser(uid)
+	}
 }

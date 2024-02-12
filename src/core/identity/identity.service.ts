@@ -12,7 +12,6 @@ export class IdentityService {
 
 	async register(user: { email: string; password: string }) {
 		const account = await this.firebaseService.createUser(user)
-		console.log(account)
 		await this.identityRepository.createUser(account.uid, user.email)
 	}
 
@@ -41,6 +40,7 @@ export class IdentityService {
 	}
 
 	async deleteUser(userId: string) {
+		await this.firebaseService.deleteUser(userId)
 		await this.identityRepository.deleteUser(userId)
 	}
 
