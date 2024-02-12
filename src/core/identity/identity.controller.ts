@@ -42,7 +42,7 @@ export class IdentityController {
 	@ApiBody({ type: UserDto })
 	@ApiResponse(CREATE_USER_API_RESPONSE)
 	@Post('create')
-	async createClient(@Body() user: UserDto): Promise<void> {
+	async create(@Body() user: UserDto): Promise<void> {
 		try {
 			return await this.identityService.register(user)
 		} catch (error) {

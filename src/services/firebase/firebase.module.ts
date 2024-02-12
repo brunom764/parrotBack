@@ -11,7 +11,9 @@ const firebaseProvider = {
 			type: configService.get<string>('FIREBASE_TYPE'),
 			projectId: configService.get<string>('FIREBASE_PROJECT_ID'),
 			privateKeyId: configService.get<string>('FIREBASE_PRIVATE_KEY_ID'),
-			privateKey: configService.get<string>('FIREBASE_PRIVATE_KEY'),
+			privateKey: configService
+				.get<string>('FIREBASE_PRIVATE_KEY')
+				.replace(/\\n/gm, '\n'),
 			clientEmail: configService.get<string>('FIREBASE_CLIENT_EMAIL'),
 			clientId: configService.get<string>('FIREBASE_CLIENT_ID'),
 			authUri: configService.get<string>('FIREBASE_AUTH_URI'),
