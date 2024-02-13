@@ -1,0 +1,19 @@
+###################
+# BUILD FOR LOCAL DEVELOPMENT
+###################
+
+FROM node:18.16.0-alpine As development
+RUN apk add openssl openssl-dev libc6-compat && rm -rf /var/cache/apk/*
+RUN apk add --update --no-cache openssl1.1-compat
+
+WORKDIR /usr/src/parrotback
+
+COPY --chown=node:node package.json ./
+
+COPY --chown=node:node . .
+
+USER node
+
+EXPOSE 3000
+
+CMD ["yarn", "start:dev"]

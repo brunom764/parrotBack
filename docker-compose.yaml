@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: parrot-api
+    entrypoint: 'yarn start:dev'
+    tty: true
+    volumes:
+      - './:/usr/src/parrotback'
+      - './node_modules:/app/node_modules'
+    ports:
+      - '3000:3000'
+    depends_on:
+      - postgres
+    networks:
+      - parrotback
+  postgres:
+    image: postgres:14.1
+    container_name: parrotback-postgres
+    restart: always
+    volumes:
+      - './postgres/data:/var/lib/postgresql/data'
+    tty: true
+    environment:
+      POSTGRES_DB: parrotback
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - '3003:5432'
+    networks:
+      - parrotback
+
+networks:
+  parrotback:
+    driver: bridge
