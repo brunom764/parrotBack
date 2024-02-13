@@ -3,12 +3,10 @@
 ###################
 
 FROM node:18.16.0-alpine As build
-ARG SSL_PEM_CONTENT
-
 RUN apk add openssl openssl-dev libc6-compat && rm -rf /var/cache/apk/*
 RUN apk add --update --no-cache openssl1.1-compat
 
-WORKDIR /usr/src/propensity
+WORKDIR /usr/src/parrotback
 
 COPY --chown=node:node package.json ./
 COPY --chown=node:node yarn.lock ./
@@ -19,7 +17,6 @@ RUN yarn
 
 COPY --chown=node:node . .
 
-RUN echo -e $SSL_PEM_CONTENT > ./prisma/database.crt.pem
 RUN npx prisma generate
 RUN npm run build
 
@@ -36,16 +33,18 @@ USER node
 ###################
 
 FROM node:18.16.0-alpine As production
+#ARG SSL_PEM_CONTENT
 
 RUN apk add openssl openssl-dev libc6-compat && rm -rf /var/cache/apk/*
 RUN apk add --update --no-cache openssl1.1-compat
-RUN rm -rf /usr/src/parrotback/dist
 
 COPY --chown=node:node --from=build /usr/src/parrotback/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/parrotback/dist ./dist
-COPY --chown=node:node --from=build /usr/src/parrotback/prisma ./prisma
+COPY --chown=node:node ./prisma ./prisma
+#RUN echo $SSL_PEM_CONTENT > ./prisma/database.crt.pem
 
-RUN mkdir temp
+RUN npx prisma generate
+
 RUN npm install pm2 -g
 
 CMD ["pm2-runtime", "dist/main.js"]
