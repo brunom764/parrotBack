@@ -31,7 +31,7 @@ export class QuestionService {
 			question,
 			transcription.text as TranscriptText[]
 		)
-		return await this.questionRepository.createQuestion(
+		await this.questionRepository.createQuestion(
 			newQuestion.id,
 			newQuestion.transId,
 			question,

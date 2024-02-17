@@ -8,23 +8,36 @@ jest.mock('../question.repository')
 jest.mock('@core/transcription/transcription.repository')
 jest.mock('src/services/openai/openai.service')
 
+//rever essas constantes
+
 const transId = 'transId'
-const question = 'question?'
-const id = 'questionId'
-const summary = 'summary'
+const questionText = 'question?'
+const id = '1'
+const summaryText = 'summary'
+const answer = 'answer'
 const transcription = {
-	name: 'nome',
-	id: transId,
-	createdAt: new Date(),
 	userId: 'userId',
-	text: {
-		confidence: 0,
-		end: 0,
-		speaker: 'A',
-		start: 0,
-		text: 'text'
-	},
-	duration: 0
+	text: [
+		{
+			confidence: '0',
+			end: '0',
+			speaker: 'A',
+			start: '0',
+			text: 'text'
+		}
+	],
+	id: transId,
+	name: 'nome',
+	duration: 0,
+	createdAt: new Date()
+}
+
+const question = {
+	id: id,
+	transId: transId,
+	question: questionText,
+	answer: 'answer',
+	createdAt: new Date()
 }
 
 describe('QuestionService', () => {
@@ -49,36 +62,36 @@ describe('QuestionService', () => {
 	})
 
 	it('should create a question', async () => {
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(undefined)
-		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(undefined)
+		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
+		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
 		jest.spyOn(repo, 'createQuestion').mockResolvedValue(undefined)
 
-		await service.createQuestion(transId, question)
+		await service.createQuestion(transId, questionText)
 
 		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
 		expect(openAiService.generateAnswer).toHaveBeenCalledWith(
-			question,
+			questionText,
 			transcription.text
 		)
-		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, question)
+		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, questionText)
 	})
 
 	it('should create a summary', async () => {
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(undefined)
-		jest.spyOn(openAiService, 'generateSummary').mockResolvedValue(undefined)
+		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
+		jest.spyOn(openAiService, 'generateSummary').mockResolvedValue(summaryText)
 		jest.spyOn(transRepo, 'createSummary').mockResolvedValue(undefined)
 
 		await service.createSummary(transId)
 
 		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
 		expect(openAiService.generateSummary).toHaveBeenCalledWith(transcription.text)
-		expect(transRepo.createSummary).toHaveBeenCalledWith(transId, summary)
+		expect(transRepo.createSummary).toHaveBeenCalledWith(transId, summaryText)
 	})
 
 	it('should update answer', async () => {
-		jest.spyOn(repo, 'getQuestionById').mockResolvedValue(undefined)
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(undefined)
-		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(undefined)
+		jest.spyOn(repo, 'getQuestionById').mockResolvedValue(question)
+		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
+		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
 		jest.spyOn(repo, 'updateAnswer').mockResolvedValue(undefined)
 
 		await service.createSummary(transId)
@@ -86,14 +99,14 @@ describe('QuestionService', () => {
 		expect(repo.getQuestionById).toHaveBeenCalledWith(id)
 		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
 		expect(openAiService.generateAnswer).toHaveBeenCalledWith(
-			question,
+			question.question,
 			transcription.text
 		)
-		expect(repo.updateAnswer).toHaveBeenCalledWith(id, summary)
+		expect(repo.updateAnswer).toHaveBeenCalledWith(question.id, summaryText)
 	})
 
 	it('should get question by id', async () => {
-		jest.spyOn(repo, 'getQuestionById').mockResolvedValue(undefined)
+		jest.spyOn(repo, 'getQuestionById').mockResolvedValue(question)
 
 		await service.getQuestionById(id)
 
@@ -101,7 +114,15 @@ describe('QuestionService', () => {
 	})
 
 	it('should get questions by transcription id', async () => {
-		jest.spyOn(repo, 'getQuestionsByTransId').mockResolvedValue(undefined)
+		const questions = [
+			{
+				id: transId,
+				createdAt: new Date(),
+				answer: answer,
+				question: question.question
+			}
+		]
+		jest.spyOn(repo, 'getQuestionsByTransId').mockResolvedValue(questions)
 
 		await service.getQuestionsByTransId(transId)
 
@@ -109,14 +130,21 @@ describe('QuestionService', () => {
 	})
 
 	it('should get summary by id', async () => {
-		jest.spyOn(transRepo, 'getSummaryById').mockResolvedValue(undefined)
+		const summary = [
+			{
+				id: '2',
+				name: 'nome',
+				summary: summaryText
+			}
+		]
+		jest.spyOn(transRepo, 'getSummaryById').mockResolvedValue(summary)
 
 		await service.getSummaryById(id)
 
 		expect(transRepo.getSummaryById).toHaveBeenCalledWith(id)
 	})
 
-	it('should delete question by id', async () => {
+	it('should delete question', async () => {
 		jest.spyOn(repo, 'deleteQuestion').mockResolvedValue(undefined)
 
 		await service.deleteQuestion(id)
@@ -124,7 +152,7 @@ describe('QuestionService', () => {
 		expect(repo.deleteQuestion).toHaveBeenCalledWith(id)
 	})
 
-	it('should delete summary by id', async () => {
+	it('should delete summary', async () => {
 		jest.spyOn(transRepo, 'createSummary').mockResolvedValue(undefined)
 
 		await service.deleteSummary(id)
