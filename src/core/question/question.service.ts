@@ -31,7 +31,7 @@ export class QuestionService {
 			question,
 			transcription.text as TranscriptText[]
 		)
-		await this.questionRepository.createQuestion(
+		return await this.questionRepository.createQuestion(
 			newQuestion.id,
 			newQuestion.transId,
 			question,
@@ -78,7 +78,7 @@ export class QuestionService {
 		await this.questionRepository.deleteQuestion(id)
 	}
 
-	async deleteSummary(id: string) {
-		await this.transcriptionRepository.createSummary(id, '')
+	async deleteSummary(transId: string) {
+		await this.transcriptionRepository.deleteSummary(transId)
 	}
 }

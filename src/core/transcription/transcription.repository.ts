@@ -173,4 +173,12 @@ export class TranscriptionRepository {
 			}
 		})
 	}
+
+	async deleteSummary(id: string) {
+		return await this.prisma.transcription.delete({
+			where: {
+				id
+			}
+		})
+	}
 }
