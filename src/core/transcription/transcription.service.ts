@@ -24,7 +24,7 @@ export class TranscriptionService {
 
 		if (audioUrl) {
 			const transcriptionInfo = (await this.assemblyService.transcribeAudio(
-				fileUrl
+				audioUrl
 			)) as ITranscript
 			const transcriptionText = transcriptionInfo.utterances.map((utterance) => {
 				return {
