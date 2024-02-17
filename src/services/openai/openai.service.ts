@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { TranscriptText } from '@core/transcription/entities'
 import { Injectable } from '@nestjs/common'
 import { OpenAI } from 'openai'

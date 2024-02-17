@@ -175,9 +175,12 @@ export class TranscriptionRepository {
 	}
 
 	async deleteSummary(id: string) {
-		return await this.prisma.transcription.delete({
+		return await this.prisma.transcription.update({
 			where: {
 				id
+			},
+			data: {
+				summary: ''
 			}
 		})
 	}
