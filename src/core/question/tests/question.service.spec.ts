@@ -1,16 +1,16 @@
+import { TranscriptionModule } from '@core/transcription/transcription.module'
 import { QuestionService } from '../question.service'
 import { QuestionRepository } from '../question.repository'
 import { TranscriptionRepository } from '@core/transcription/transcription.repository'
 import { TestingModule, Test } from '@nestjs/testing'
 import { OpenaiService } from 'src/services/openai/openai.service'
+import { OpenaiModule } from 'src/services/openai/openai.module'
 
 jest.mock('../question.repository')
 jest.mock('@core/transcription/transcription.repository')
 jest.mock('src/services/openai/openai.service')
 
-//rever essas constantes
-
-const transId = 'transId'
+const transId = '11'
 const questionText = 'question?'
 const id = '1'
 const summaryText = 'summary'
@@ -48,7 +48,8 @@ describe('QuestionService', () => {
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
-			providers: [QuestionService, QuestionRepository]
+			imports: [TranscriptionModule, OpenaiModule],
+			providers: [QuestionService, QuestionRepository, TranscriptionRepository]
 		}).compile()
 
 		service = module.get<QuestionService>(QuestionService)
@@ -64,7 +65,7 @@ describe('QuestionService', () => {
 	it('should create a question', async () => {
 		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
 		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
-		jest.spyOn(repo, 'createQuestion').mockResolvedValue(undefined)
+		jest.spyOn(repo, 'createQuestion').mockResolvedValue(question)
 
 		await service.createQuestion(transId, questionText)
 
@@ -73,7 +74,7 @@ describe('QuestionService', () => {
 			questionText,
 			transcription.text
 		)
-		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, questionText)
+		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, questionText, answer)
 	})
 
 	it('should create a summary', async () => {
@@ -132,16 +133,16 @@ describe('QuestionService', () => {
 	it('should get summary by id', async () => {
 		const summary = [
 			{
-				id: '2',
+				id: '1',
 				name: 'nome',
 				summary: summaryText
 			}
 		]
 		jest.spyOn(transRepo, 'getSummaryById').mockResolvedValue(summary)
 
-		await service.getSummaryById(id)
+		await service.getSummaryById(transId)
 
-		expect(transRepo.getSummaryById).toHaveBeenCalledWith(id)
+		expect(transRepo.getSummaryById).toHaveBeenCalledWith(transId)
 	})
 
 	it('should delete question', async () => {
@@ -153,10 +154,10 @@ describe('QuestionService', () => {
 	})
 
 	it('should delete summary', async () => {
-		jest.spyOn(transRepo, 'createSummary').mockResolvedValue(undefined)
+		jest.spyOn(transRepo, 'deleteSummary').mockResolvedValue(undefined)
 
-		await service.deleteSummary(id)
+		await service.deleteSummary(transId)
 
-		expect(transRepo.createSummary).toHaveBeenCalledWith(id, '')
+		expect(transRepo.deleteSummary).toHaveBeenCalledWith(transId)
 	})
 })
