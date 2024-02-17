@@ -27,7 +27,7 @@ export class QuestionService {
 
 		const transcription = await this.transcriptionRepository.getTranscriptionById(transId)
 
-		const answerText = await this.openAiService.genereateAnswer(
+		const answerText = await this.openAiService.generateAnswer(
 			question,
 			transcription.text as TranscriptText[]
 		)
@@ -52,7 +52,7 @@ export class QuestionService {
 		const transcription = await this.transcriptionRepository.getTranscriptionById(
 			question.transId
 		)
-		const answer = await this.openAiService.genereateAnswer(
+		const answer = await this.openAiService.generateAnswer(
 			question.question,
 			transcription.text as TranscriptText[]
 		)

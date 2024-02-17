@@ -9,7 +9,7 @@ const openai = new OpenAI()
 export class OpenaiService {
 	api_token: string = process.env.OPENAI_API_TOKEN
 
-	async genereateAnswer(question: string, context: TranscriptText[]) {
+	async generateAnswer(question: string, context: TranscriptText[]) {
 		const answer = await openai.chat.completions.create({
 			messages: [
 				{ role: 'system', content: `Responda ${question} com base no texto: ${context}` }
