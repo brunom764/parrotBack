@@ -1,28 +1,24 @@
 import { Injectable, Inject } from '@nestjs/common'
 import { Tier } from './entities'
-import { getAuth } from 'firebase-admin/auth'
 import { IdentityRepository } from './identity.repository'
+import { FirebaseService } from 'src/services/firebase/firebase.service'
 
 @Injectable()
 export class IdentityService {
 	constructor(
-		@Inject(IdentityRepository) protected identityRepository: IdentityRepository
+		@Inject(IdentityRepository) protected identityRepository: IdentityRepository,
+		@Inject(FirebaseService) protected firebaseService: FirebaseService
 	) {}
 
 	async register(user: { email: string; password: string }) {
-		const account = await getAuth().createUser({
-			email: user.email,
-			emailVerified: true,
-			password: user.password,
-			displayName: user.email
-		})
+		const account = await this.firebaseService.createUser(user)
 		await this.identityRepository.createUser(account.uid, user.email)
 	}
 
 	async createAccountByLoginWithGoogle(email: string) {
 		const user = await this.identityRepository.getUserByEmail(email)
 		if (!user) {
-			const accountInfo = await getAuth().getUserByEmail(email)
+			const accountInfo = await this.firebaseService.getUserByEmail(email)
 			await this.identityRepository.createUser(accountInfo.uid, email)
 		}
 	}
@@ -44,6 +40,7 @@ export class IdentityService {
 	}
 
 	async deleteUser(userId: string) {
+		await this.firebaseService.deleteUser(userId)
 		await this.identityRepository.deleteUser(userId)
 	}
 

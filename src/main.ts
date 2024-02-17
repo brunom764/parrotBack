@@ -2,7 +2,6 @@ import { ValidationPipe } from '@nestjs/common'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
-import { initializeFirebase } from './firebase.config'
 import * as express from 'express'
 
 async function bootstrap() {
@@ -22,4 +21,3 @@ async function bootstrap() {
 	await app.listen(process.env.PORT || 3000)
 }
 bootstrap()
-initializeFirebase()
