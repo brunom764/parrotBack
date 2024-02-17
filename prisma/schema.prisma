@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique @map("email")
+  credits   Int       @default(10)
+  tier      Tier      @default(FREE) @map("tier")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+  transcriptions      Transcription[]
+}
+
+model Transcription {
+  id        String    @id @default(uuid()) @map("id")
+  userId    String    @map("user_id")
+  name      String    @map("name")
+  text      Json[]
+  duration  Int       @map("duration")    
+  summary   String    @default(" ") @map("summary")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id])
+  questions Question[]
+}
+
+model Question {
+  id        String    @id @default(uuid())
+  transId   String    @map("trans_id")
+  question  String    @map("question")
+  answer    String    @default(" ")   @map("answer")
+  createdAt DateTime  @default(now()) @map("created_at")
+  transcription       Transcription   @relation(fields: [transId], references: [id])
+}
+ 
+enum Tier {
+  FREE
+  BASIC
+  PREMIUM 
+}
