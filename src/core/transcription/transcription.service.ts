@@ -19,7 +19,6 @@ export class TranscriptionService {
 			createdAt: new Date()
 		})
 		const audioUrl = await this.assemblyService.upload_file(fileUrl)
-
 		if (audioUrl) {
 			const transcriptionInfo = (await this.assemblyService.transcribeAudio(
 				audioUrl
