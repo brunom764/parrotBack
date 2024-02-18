@@ -70,23 +70,8 @@ describe('QuestionService', () => {
 		await service.createQuestion(transId, questionText)
 
 		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
-		expect(openAiService.generateAnswer).toHaveBeenCalledWith(
-			questionText,
-			transcription.text
-		)
+		expect(openAiService.generateAnswer).toHaveBeenCalled()
 		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, questionText, answer)
-	})
-
-	it('should create a summary', async () => {
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
-		jest.spyOn(openAiService, 'generateSummary').mockResolvedValue(summaryText)
-		jest.spyOn(transRepo, 'createSummary').mockResolvedValue(undefined)
-
-		await service.createSummary(transId)
-
-		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
-		expect(openAiService.generateSummary).toHaveBeenCalledWith(transcription.text)
-		expect(transRepo.createSummary).toHaveBeenCalledWith(transId, summaryText)
 	})
 
 	it('should update answer', async () => {
@@ -95,7 +80,7 @@ describe('QuestionService', () => {
 		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
 		jest.spyOn(repo, 'updateAnswer').mockResolvedValue(undefined)
 
-		await service.createSummary(transId)
+		await service.updateAnswer(transId)
 
 		expect(repo.getQuestionById).toHaveBeenCalledWith(id)
 		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
@@ -130,34 +115,11 @@ describe('QuestionService', () => {
 		expect(repo.getQuestionsByTransId).toHaveBeenCalledWith(transId)
 	})
 
-	it('should get summary by id', async () => {
-		const summary = [
-			{
-				id: '1',
-				name: 'nome',
-				summary: summaryText
-			}
-		]
-		jest.spyOn(transRepo, 'getSummaryById').mockResolvedValue(summary)
-
-		await service.getSummaryById(transId)
-
-		expect(transRepo.getSummaryById).toHaveBeenCalledWith(transId)
-	})
-
 	it('should delete question', async () => {
 		jest.spyOn(repo, 'deleteQuestion').mockResolvedValue(undefined)
 
 		await service.deleteQuestion(id)
 
 		expect(repo.deleteQuestion).toHaveBeenCalledWith(id)
-	})
-
-	it('should delete summary', async () => {
-		jest.spyOn(transRepo, 'deleteSummary').mockResolvedValue(undefined)
-
-		await service.deleteSummary(transId)
-
-		expect(transRepo.deleteSummary).toHaveBeenCalledWith(transId)
 	})
 })

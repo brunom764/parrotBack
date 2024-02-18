@@ -39,14 +39,6 @@ export class QuestionService {
 		)
 	}
 
-	async createSummary(transId: string) {
-		const transcription = await this.transcriptionRepository.getTranscriptionById(transId)
-		const summary = await this.openAiService.generateSummary(
-			transcription.text as TranscriptText[]
-		)
-		await this.transcriptionRepository.createSummary(transId, summary)
-	}
-
 	async updateAnswer(id: string) {
 		const question = await this.questionRepository.getQuestionById(id)
 		const transcription = await this.transcriptionRepository.getTranscriptionById(
@@ -56,29 +48,18 @@ export class QuestionService {
 			question.question,
 			transcription.text as TranscriptText[]
 		)
-		await this.questionRepository.updateAnswer(question.id, answer)
+		return await this.questionRepository.updateAnswer(question.id, answer)
 	}
 
 	async getQuestionById(id: string) {
-		const question = await this.questionRepository.getQuestionById(id)
-		return question
+		return await this.questionRepository.getQuestionById(id)
 	}
 
 	async getQuestionsByTransId(transId: string) {
-		const questions = await this.questionRepository.getQuestionsByTransId(transId)
-		return questions
-	}
-
-	async getSummaryById(id: string) {
-		const summary = await this.transcriptionRepository.getSummaryById(id)
-		return summary
+		return await this.questionRepository.getQuestionsByTransId(transId)
 	}
 
 	async deleteQuestion(id: string) {
 		await this.questionRepository.deleteQuestion(id)
-	}
-
-	async deleteSummary(transId: string) {
-		await this.transcriptionRepository.deleteSummary(transId)
 	}
 }
