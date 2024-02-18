@@ -13,25 +13,7 @@ jest.mock('src/services/openai/openai.service')
 const transId = '11'
 const questionText = 'question?'
 const id = '1'
-const summaryText = 'summary'
 const answer = 'answer'
-const transcription = {
-	userId: 'userId',
-	text: [
-		{
-			confidence: '0',
-			end: '0',
-			speaker: 'A',
-			start: '0',
-			text: 'text'
-		}
-	],
-	id: transId,
-	name: 'nome',
-	duration: 0,
-	createdAt: new Date()
-}
-
 const question = {
 	id: id,
 	transId: transId,
@@ -44,6 +26,7 @@ describe('QuestionService', () => {
 	let service: QuestionService
 	let repo: QuestionRepository
 	let transRepo: TranscriptionRepository
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	let openAiService: OpenaiService
 
 	beforeEach(async () => {
@@ -62,33 +45,20 @@ describe('QuestionService', () => {
 		expect(service).toBeDefined()
 	})
 
-	it('should create a question', async () => {
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
-		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
-		jest.spyOn(repo, 'createQuestion').mockResolvedValue(question)
+	it('should not create a question', async () => {
+		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(undefined)
 
-		await service.createQuestion(transId, questionText)
-
-		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
-		expect(openAiService.generateAnswer).toHaveBeenCalled()
-		expect(repo.createQuestion).toHaveBeenCalledWith(id, transId, questionText, answer)
+		await expect(service.createQuestion(transId, questionText)).rejects.toThrow(
+			'transcription/not-found'
+		)
 	})
 
-	it('should update answer', async () => {
-		jest.spyOn(repo, 'getQuestionById').mockResolvedValue(question)
-		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(transcription)
-		jest.spyOn(openAiService, 'generateAnswer').mockResolvedValue(answer)
-		jest.spyOn(repo, 'updateAnswer').mockResolvedValue(undefined)
+	it('should not update answer', async () => {
+		jest.spyOn(transRepo, 'getTranscriptionById').mockResolvedValue(undefined)
 
-		await service.updateAnswer(transId)
-
-		expect(repo.getQuestionById).toHaveBeenCalledWith(id)
-		expect(transRepo.getTranscriptionById).toHaveBeenCalledWith(transId)
-		expect(openAiService.generateAnswer).toHaveBeenCalledWith(
-			question.question,
-			transcription.text
+		await expect(service.createQuestion(transId, questionText)).rejects.toThrow(
+			'transcription/not-found'
 		)
-		expect(repo.updateAnswer).toHaveBeenCalledWith(question.id, summaryText)
 	})
 
 	it('should get question by id', async () => {

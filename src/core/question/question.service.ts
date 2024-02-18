@@ -27,6 +27,10 @@ export class QuestionService {
 
 		const transcription = await this.transcriptionRepository.getTranscriptionById(transId)
 
+		if (!transcription) {
+			throw new Error('transcription/not-found')
+		}
+
 		const answerText = await this.openAiService.generateAnswer(
 			question,
 			transcription.text as TranscriptText[]
@@ -44,6 +48,9 @@ export class QuestionService {
 		const transcription = await this.transcriptionRepository.getTranscriptionById(
 			question.transId
 		)
+		if (!transcription) {
+			throw new Error('transcription/not-found')
+		}
 		const answer = await this.openAiService.generateAnswer(
 			question.question,
 			transcription.text as TranscriptText[]
