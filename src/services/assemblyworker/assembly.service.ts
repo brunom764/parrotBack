@@ -36,8 +36,7 @@ export class AssemblyService {
 				return null
 			}
 		} catch (error) {
-			console.error(`Error: ${error}`)
-			return null
+			throw new Error('file/upload-failed')
 		}
 	}
 
