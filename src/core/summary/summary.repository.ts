@@ -64,7 +64,7 @@ export class SummaryRepository {
 	}
 
 	async getSummaryById(id: string) {
-		return await this.prisma.transcription.findMany({
+		return await this.prisma.transcription.findUnique({
 			where: {
 				id
 			},

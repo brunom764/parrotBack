@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { OpenaiService } from 'src/services/openai/openai.service'
-import { SummaryRepository } from './summary.repositoy'
+import { SummaryRepository } from './summary.repository'
 import { TranscriptText } from '@core/transcription/entities'
 
 @Injectable()

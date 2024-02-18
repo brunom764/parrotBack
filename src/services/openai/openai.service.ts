@@ -2,14 +2,16 @@ import { TranscriptText } from '@core/transcription/entities'
 import { Injectable } from '@nestjs/common'
 import { OpenAI } from 'openai'
 
-const openai = new OpenAI()
-
 @Injectable()
 export class OpenaiService {
-	api_token: string = process.env.OPENAI_API_TOKEN
+	private readonly openai = new OpenAI()
+
+	constructor() {
+		this.openai.apiKey = process.env.OPENAI_API_TOKEN
+	}
 
 	async generateAnswer(question: string, context: TranscriptText[]) {
-		const answer = await openai.chat.completions.create({
+		const answer = await this.openai.chat.completions.create({
 			messages: [
 				{ role: 'system', content: `Responda ${question} com base no texto: ${context}` }
 			],
@@ -19,7 +21,7 @@ export class OpenaiService {
 	}
 
 	async generateSummary(context: TranscriptText[]) {
-		const sumarry = await openai.chat.completions.create({
+		const sumarry = await this.openai.chat.completions.create({
 			messages: [
 				{
 					role: 'system',
