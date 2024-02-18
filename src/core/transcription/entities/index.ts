@@ -9,7 +9,7 @@ export type TranscriptText = {
 }
 
 export interface ITranscription {
-	id: string
+	id?: string
 	userId: string
 	name: string
 	duration?: number
