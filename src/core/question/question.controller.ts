@@ -9,24 +9,21 @@ import {
 	Post,
 	Put
 } from '@nestjs/common'
-import { QuestionService } from './question.service'
-import { CreateSummaryDto, QuestionDto } from './dtos'
+import { QuestionDto } from './dtos'
 import {
 	INTERNAL_SERVER_ERROR_API_RESPONSE,
 	BAD_REQUEST_API_RESPONSE,
 	CREATE_QUESTION_API_RESPONSE,
-	CREATE_SUMMARY_DTO_API_RESPONSE,
 	GET_QUESTION_API_RESPONSE,
 	NOT_FOUND_API_RESPONSE,
 	QUESTION_ID_PARAM,
-	GET_SUMMARY_API_RESPONSE,
 	UPDATE_ANSWER_API_RESPONSE,
 	DELETE_QUESTION_API_RESPONSE,
 	GET_QUESTIONS_API_RESPONSE,
-	TRANS_ID_PARAM,
-	DELETE_SUMMARY_API_RESPONSE
+	TRANS_ID_PARAM
 } from '@core/common/docs/constants'
 import { ApiBody, ApiParam, ApiResponse } from '@nestjs/swagger'
+import { QuestionService } from './question.service'
 
 @ApiResponse(INTERNAL_SERVER_ERROR_API_RESPONSE)
 @ApiResponse(BAD_REQUEST_API_RESPONSE)
@@ -37,7 +34,7 @@ export class QuestionController {
 	@HttpCode(201)
 	@ApiBody({ type: QuestionDto })
 	@ApiResponse(CREATE_QUESTION_API_RESPONSE)
-	@Post('create-question')
+	@Post('create')
 	async createQuestion(@Body() question: QuestionDto) {
 		try {
 			return await this.questionService.createQuestion(
@@ -49,21 +46,11 @@ export class QuestionController {
 		}
 	}
 
-	@ApiBody({ type: CreateSummaryDto })
-	@ApiResponse(CREATE_SUMMARY_DTO_API_RESPONSE)
-	@Post('create-summary')
-	async createSummary(@Body() data: CreateSummaryDto) {
-		try {
-			return await this.questionService.createSummary(data.transId)
-		} catch (error) {
-			throw new InternalServerErrorException('summary/create-failed')
-		}
-	}
-
+	@HttpCode(200)
 	@ApiParam(QUESTION_ID_PARAM)
 	@ApiResponse(GET_QUESTION_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Get('question-by-id/:id')
+	@Get('by-id/:id')
 	async getQuestionById(@Param('id') id: string) {
 		try {
 			return await this.questionService.getQuestionById(id)
@@ -72,10 +59,11 @@ export class QuestionController {
 		}
 	}
 
+	@HttpCode(200)
 	@ApiParam(TRANS_ID_PARAM)
 	@ApiResponse(GET_QUESTIONS_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Get('questions/:id')
+	@Get('by-trans-id/:id')
 	async getQuestionsByTransId(@Param('id') id: string) {
 		try {
 			return await this.questionService.getQuestionsByTransId(id)
@@ -84,18 +72,7 @@ export class QuestionController {
 		}
 	}
 
-	@ApiParam(TRANS_ID_PARAM)
-	@ApiResponse(GET_SUMMARY_API_RESPONSE)
-	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Get('summary/:id')
-	async getSummaryById(@Param('id') id: string) {
-		try {
-			return await this.questionService.getSummaryById(id)
-		} catch (error) {
-			throw new InternalServerErrorException('summary/get-by-transId-failed')
-		}
-	}
-
+	@HttpCode(200)
 	@ApiParam(QUESTION_ID_PARAM)
 	@ApiResponse(UPDATE_ANSWER_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
@@ -108,27 +85,16 @@ export class QuestionController {
 		}
 	}
 
+	@HttpCode(200)
 	@ApiParam(QUESTION_ID_PARAM)
 	@ApiResponse(DELETE_QUESTION_API_RESPONSE)
 	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Delete('question/:id')
+	@Delete(':id')
 	async deleteQuestion(@Param('id') id: string) {
 		try {
 			return await this.questionService.deleteQuestion(id)
 		} catch (error) {
 			throw new InternalServerErrorException('question/delete-failed')
-		}
-	}
-
-	@ApiParam(TRANS_ID_PARAM)
-	@ApiResponse(DELETE_SUMMARY_API_RESPONSE)
-	@ApiResponse(NOT_FOUND_API_RESPONSE)
-	@Delete('summary/:transId')
-	async deleteSummary(@Param('transId') transId: string) {
-		try {
-			return await this.questionService.deleteSummary(transId)
-		} catch (error) {
-			throw new InternalServerErrorException('summary/delete-failed')
 		}
 	}
 }

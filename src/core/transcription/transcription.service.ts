@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { AssemblyService } from 'src/services/assemblyworker/assembly.service'
 import { Transcription } from './entities'
-import * as uuid from 'uuid'
 import { ITranscript } from 'src/services/assemblyworker/assembly.interface'
 import { TranscriptionRepository } from './transcription.repository'
 
@@ -15,7 +14,6 @@ export class TranscriptionService {
 
 	async createTranscription(fileUrl: string, userId: string, name: string) {
 		const newTranscription = new Transcription({
-			id: uuid.v4(),
 			userId,
 			name,
 			createdAt: new Date()
@@ -24,7 +22,7 @@ export class TranscriptionService {
 
 		if (audioUrl) {
 			const transcriptionInfo = (await this.assemblyService.transcribeAudio(
-				fileUrl
+				audioUrl
 			)) as ITranscript
 			const transcriptionText = transcriptionInfo.utterances.map((utterance) => {
 				return {
@@ -36,7 +34,7 @@ export class TranscriptionService {
 				}
 			})
 			await this.transcriptionRepository.createTranscription(
-				newTranscription.id,
+				transcriptionInfo.id,
 				newTranscription.userId,
 				newTranscription.name,
 				transcriptionInfo.audio_duration,
