@@ -1,16 +1,23 @@
 import { Injectable } from '@nestjs/common'
-import fs from 'fs-extra'
+import * as fs from 'fs'
 import { IResponseData, ITranscript } from './assembly.interface'
 
 @Injectable()
 export class AssemblyService {
-	api_token: string = process.env.ASSEMBLY_API_TOKEN
+	private api_token: string
+	constructor() {
+		this.api_token = process.env.ASSEMBLY_API_TOKEN
+	}
 
-	// Function to upload a local file to the AssemblyAI API
 	async upload_file(path: string): Promise<string | null> {
-		const data = fs.readFileSync(path)
 		const url = 'https://api.assemblyai.com/v2/upload'
-
+		let data: Buffer
+		try {
+			data = await fs.promises.readFile(path)
+		} catch (err) {
+			console.error(`Error: ${err}`)
+			throw new Error('file/read-failed')
+		}
 		try {
 			const response = await fetch(url, {
 				method: 'POST',
@@ -29,8 +36,7 @@ export class AssemblyService {
 				return null
 			}
 		} catch (error) {
-			console.error(`Error: ${error}`)
-			return null
+			throw new Error('file/upload-failed')
 		}
 	}
 
