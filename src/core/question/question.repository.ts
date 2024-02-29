@@ -43,7 +43,7 @@ export class QuestionRepository {
 					id: userId
 				},
 				data: {
-					credits: --user.credits
+					credits: user.credits - 1
 				}
 			})
 
