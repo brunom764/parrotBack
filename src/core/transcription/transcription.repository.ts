@@ -28,7 +28,7 @@ export class TranscriptionRepository {
 				throw new Error('user/get-failed')
 			}
 
-			const transcriptionCreditCount = Math.ceil((duration * 10) / 60)
+			const transcriptionCreditCount = Math.ceil((duration * 100) / 60)
 			if (user.credits === 0 || user.credits < transcriptionCreditCount) {
 				throw new Error('user/credits-insufficient')
 			}
