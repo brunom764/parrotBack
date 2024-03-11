@@ -7,11 +7,11 @@ Parrot API é o backend do saas Parrot. Um software que une inteligência artifi
 * Usuários podem se cadastrar e fazer login em suas contas cadastradas
 * Usuários autenticados podem acessar todos o serviços fornecidos
 
-		1. Transcrição de áudio,
+		1. Transcrição de áudio;
 
-		2. Gerar resumo da transcrição,
+		2. Gerar resumo da transcrição;
 
-		3. Fazer perguntas sobre a transcrição
+		3. Fazer perguntas sobre a transcrição.
 
 # Endpoints
 
