@@ -1,10 +1,14 @@
 # ParrotBack
 
-ParrotBack é o backend do projeto * Parrot *. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
+ParrotBack é o backend do projeto **Parrot**. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
 
 # Features
+
 * Usuários podem se cadastrar e fazer login em suas contas cadastradas
-* Usuários autenticados podem acessar todos o serviços fornecidos: transcrição de áudio, gerar resumo da transcrição, fazer perguntas sobre a transcrição
+* Usuários autenticados podem acessar todos o serviços fornecidos:
+							1. Transcrição de áudio,
+							2. Gerar resumo da transcrição,
+							3. Fazer perguntas sobre a transcrição
 
 # Endpoints
 
