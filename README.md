@@ -1,7 +1,4 @@
 # ParrotBack
-Parrot backend
-
-# ParrotBack
 
 ParrotBack é o backend do projeto * Parrot *. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
 
