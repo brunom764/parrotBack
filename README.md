@@ -5,41 +5,55 @@ ParrotBack é o backend do projeto **Parrot**. Um software que une inteligência
 # Features
 
 * Usuários podem se cadastrar e fazer login em suas contas cadastradas
-* Usuários autenticados podem acessar todos o serviços fornecidos:
-							1. Transcrição de áudio,
-							2. Gerar resumo da transcrição,
-							3. Fazer perguntas sobre a transcrição
+* Usuários autenticados podem acessar todos o serviços fornecidos
+
+		1. Transcrição de áudio,
+
+		2. Gerar resumo da transcrição,
+
+		3. Fazer perguntas sobre a transcrição
 
 # Endpoints
 
-| HTTP Verbs | Endpoints | Action |
-| -----------| ----------| ------ |
-* Identity
-| POST   | /create               | To sign up a new user account |
-| POST   | /login-with-google    | To sign up a new user account with Google |
-| GET    | /user-by-email/:email | To get user by email |
-| GET    | /user-by-id/:id       | To get user by id |
-| PUT    | /update-tier/:id      | To update tier |
-| PUT    | /update-credits/:id   | To update credits |
-| DELETE | /delete/:id           | To delete user account |
+* **IDENTITY**
 
-* Question
-| POST   | /create               | To create a new question |
-| GET    | /by-id/:id            | To get question by id |
-| GET    | /by-trans-id/:id      | To get question by transcription id |
-| PUT    | /update-answer/:id    | To update answer |
-| DELETE | /delete/:id           | To delete question |
+| Método HTTP | Endpoint              | Descrição                                      |
+|-------------|-----------------------|------------------------------------------------|
+| POST        | /create               | Criar uma nova conta de usuário                |
+| POST        | /login-with-google    | Criar uma nova conta de usuário com o Google   |
+| GET         | /user-by-email/:email | Obter usuário por email                        |
+| GET         | /user-by-id/:id       | Obter usuário por ID                           |
+| PUT         | /update-tier/:id      | Atualizar nível de usuário                     |
+| PUT         | /update-credits/:id   | Atualizar créditos do usuário                  |
+| DELETE      | /delete/:id           | Excluir conta de usuário                       |
 
-* Summary
-| POST   | /create               | To create a new summary |
-| GET    | /by-id/:id            | To get summary by id |
-| DELETE | /delete/:id           | To delete summary |
+* **QUESTION**
 
-* Transcription
-| POST   | /upload-audio/:id     | To create a new transcription |
-| GET    | /by-id/:id            | To get transcription by id |
-| GET    | /by-id/:id            | To get transcription by user id |
-| DELETE | /delete/:id           | To delete transcription |
+| Método HTTP | Endpoint              | Descrição                               |
+|-------------|-----------------------|-----------------------------------------|
+| POST        | /create               | Criar uma nova pergunta                 |
+| GET         | /by-id/:id            | Obter pergunta por ID                   |
+| GET         | /by-trans-id/:id      | Obter perguntas por ID da transcrição   |
+| PUT         | /update-answer/:id    | Atualizar resposta                      |
+| DELETE      | /delete/:id           | Excluir pergunta                        |
+
+* **SUMMARY**
+
+| Método HTTP | Endpoint         | Descrição                               |
+|-------------|------------------|-----------------------------------------|
+| POST        | /create          | Criar um novo resumo                    |
+| GET         | /by-id/:id       | Obter resumo por ID                     |
+| DELETE      | /delete/:id      | Excluir resumo                          |
+
+* **TRASCRIPTION**
+
+| Método HTTP | Endpoint                  | Descrição                               |
+|-------------|---------------------------|-----------------------------------------|
+| POST        | /upload-audio/:id         | Criar uma nova transcrição              |
+| GET         | /by-id/:id                | Obter transcrição por ID                |
+| GET         | /by-user/:id              | Obter transcrição por ID do usuário     |
+| DELETE      | /delete/:id               | Excluir transcrição                     |
+
 
 ## Contribuindo
 
@@ -54,15 +68,20 @@ Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de co
 
 # Dependencies
 
-		@nestjs/schedule: 4.0.1,
-		@nestjs/swagger: 7.3.0,
-		@prisma/client: 5.6.0,
-		axios: 1.6.2,
-		class-transformer: 0.5.1,
-		class-validator: 0.14.0,
-		dotenv: 16.3.1,
-		firebase-admin: "^11.11.1,
-		openai: 4.25.0,
-		prisma: 5.6.0,
-		reflect-metadata: 0.1.13,
-		rxjs: 7.8.1
+	@nestjs/common: 10.2.8,
+	@nestjs/config: 3.1.1,
+	@nestjs/core: 10.2.8,
+	@nestjs/cli: 10.2.1,
+	@nestjs/platform-express: 10.2.8,
+	@nestjs/schedule: 4.0.1,
+	@nestjs/swagger: 7.3.0,
+	@prisma/client: 5.6.0,
+	axios: 1.6.2,
+	class-transformer: 0.5.1,
+	class-validator: 0.14.0,
+	dotenv: 16.3.1,
+	firebase-admin: "^11.11.1,
+	openai: 4.25.0,
+	prisma: 5.6.0,
+	reflect-metadata: 0.1.13,
+	rxjs: 7.8.1
