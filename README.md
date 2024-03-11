@@ -1,6 +1,6 @@
-# ParrotBack
+# Parrot API
 
-ParrotBack é o backend do projeto **Parrot**. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
+Parrot API é o backend do saas Parrot. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
 
 # Features
 
