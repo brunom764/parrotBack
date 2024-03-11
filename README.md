@@ -55,7 +55,7 @@ Parrot API é o backend do saas Parrot. Um software que une inteligência artifi
 | DELETE      | /delete/:id               | Excluir transcrição                     |
 
 
-## Contribuindo
+## Contributing
 
 Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de contribuir, siga estas instruções:
 
