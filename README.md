@@ -13,6 +13,10 @@ Parrot API é o backend do saas Parrot. Um software que une inteligência artifi
 
 		3. Fazer perguntas sobre a transcrição.
 
+A transcrição é gerada através da API do [AssemblyAI](https://www.assemblyai.com/docs)
+
+O resumo e as respostas das perguntas feitas pelos usuários são gerados através da API da [OpenAI](https://platform.openai.com/docs/introduction)
+
 # Endpoints
 
 * **IDENTITY**
