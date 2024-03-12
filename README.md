@@ -4,8 +4,8 @@ Parrot API é o backend do saas Parrot. Um software que une inteligência artifi
 
 # Features
 
-* Usuários podem se cadastrar e fazer login em suas contas cadastradas
-* Usuários autenticados podem acessar todos o serviços fornecidos
+* Usuários podem se cadastrar e fazer login em suas contas cadastradas;
+* Usuários autenticados podem acessar todos o serviços fornecidos.
 
 		1. Transcrição de áudio;
 
@@ -13,9 +13,9 @@ Parrot API é o backend do saas Parrot. Um software que une inteligência artifi
 
 		3. Fazer perguntas sobre a transcrição.
 
-A transcrição é gerada através da API do [AssemblyAI](https://www.assemblyai.com/docs)
+A transcrição é gerada através da API do [AssemblyAI](https://www.assemblyai.com/docs).
 
-O resumo e as respostas das perguntas feitas pelos usuários são gerados através da API da [OpenAI](https://platform.openai.com/docs/introduction)
+O resumo e as respostas das perguntas feitas pelos usuários são gerados através da API da [OpenAI](https://platform.openai.com/docs/introduction).
 
 # Endpoints
 
@@ -63,11 +63,11 @@ O resumo e as respostas das perguntas feitas pelos usuários são gerados atrav�
 
 Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de contribuir, siga estas instruções:
 
-1. Faça um fork do repositório.
-2. Crie sua branch de funcionalidade (`git checkout -b feature/SuaFeature`).
-3. Adicione suas alterações (`git add .`).
-3. Faça commits das suas alterações (`git commit -m 'Adicionando uma funcionalidade'`).
-4. Faça push para a branch (`git push origin feature/SuaFeature`).
+1. Faça um fork do repositório;
+2. Crie sua branch de funcionalidade (`git checkout -b feature/SuaFeature`);
+3. Adicione suas alterações (`git add .`);
+3. Faça commits das suas alterações (`git commit -m 'Adicionando uma funcionalidade'`);
+4. Faça push para a branch (`git push origin feature/SuaFeature`);
 5. Crie um novo Pull Request.
 
 # Dependencies
