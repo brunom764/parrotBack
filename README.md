@@ -1,3 +1,4 @@
+
 # Parrot API
 
 Parrot API é o backend do saas Parrot. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
@@ -59,6 +60,7 @@ O resumo e as respostas das perguntas feitas pelos usuários são gerados atrav�
 | DELETE      | /delete/:id               | Excluir transcrição                     |
 
 
+
 ## Contributing
 
 Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de contribuir, siga estas instruções:
@@ -69,6 +71,33 @@ Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de co
 3. Faça commits das suas alterações (`git commit -m 'Adicionando uma funcionalidade'`);
 4. Faça push para a branch (`git push origin feature/SuaFeature`);
 5. Crie um novo Pull Request.
+
+
+## Configuration
+
+#### Install Dependencies
+```bash
+$ npm install 
+```
+or 
+```bash
+$ yarn add
+```
+
+#### Configure Environment Variables (example)
+```bash
+$ cp .env.example .env
+```
+
+#### Start Development Server
+```bash
+$ npm run start:dev    
+```
+or
+```bash   
+$ yarn start:dev
+```
+
 
 # Dependencies
 
@@ -89,3 +118,4 @@ Contribuições para o ParrotBack são muito bem-vindas! Se você gostaria de co
 	prisma: 5.6.0,
 	reflect-metadata: 0.1.13,
 	rxjs: 7.8.1
+
