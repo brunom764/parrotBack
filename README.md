@@ -2,10 +2,15 @@
 
 Backend do saas Parrot. Um software que une inteligência artifical e áudios, fornecendo serviços como transcrição deles, resumos e perguntas e respostas.
 
-Disponível em: [https://parrot-nwqy.onrender.com](https://parrot-nwqy.onrender.com)
+![image](https://github.com/brunom764/parrotBack/assets/111246423/867dcbfa-9875-4267-ab4a-80b5da88c501)
 
-![image](https://github.com/brunom764/parrotFront/assets/100807129/e95832eb-07ab-4891-aea8-91886bd39cf2)
 
+API hospedada em: [https://parrot-nwqy.onrender.com](https://parrot-nwqy.onrender.com)
+
+# Documentação
+![image](https://github.com/brunom764/parrotBack/assets/111246423/1479de61-d6de-4847-8e15-641cb01f8ad2)
+
+Documentação disponível em: [https://parrot-nwqy.onrender.com/docs](https://parrot-nwqy.onrender.com/docs)
 
 # Features
 
